@@ -16,9 +16,23 @@ Le projet est accessible sur le site [GiGraph](https://gigraph.fr)
 
 ## Fabriqué avec
 
-Entrez les programmes/logiciels/ressources que vous avez utilisé pour développer votre projet
-
+### Back-end
 * [LangChain](https://github.com/hwchase17/langchainjs) - Framework JS LLM (back-end)
+* [hnswlib](https://github.com/nmslib/hnswlib) - Librairie (back-end)
+### Front-end
+* [Expressjs](https://expressjs.com) - Framework JS (front-end)
+* [Vue.js](https://vuejs.org) - Framework JS (front-end)
+* [Vuetify](https://vuetifyjs.com) - Librairie UI
+* [Echart](https://echarts.apache.org) - Librairie Visualisation JS  (front-end)
+### Logiciels
+* [Node.js](https://nodejs.org) - (version 1.18 minimum)
+* [Python](https://www.python.org) - (version 3.10.11 minimum)
+### Database
+* [Prisma](https://www.prisma.io) - ORM
+* [MySQL](https://www.mysql.com) - Database
+### Outils externes
+* [GitHub](https://github.com/Voolak/GiGraph) - Dépôt
+* [Figma](https://www.figma.com) - Créateur d'interfaces graphiques (maquette)
 
 ## Contributeurs
 Liste des [contributeurs](https://github.com/Voolak/GiGraph/contributors) du projet :
