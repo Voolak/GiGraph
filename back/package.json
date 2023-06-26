@@ -1,0 +1,36 @@
+{
+  "name": "vulcaingpt",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./app.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@prisma/client": "^4.15.0",
+    "@quixo3/prisma-session-store": "^3.1.11",
+    "bcrypt": "^5.1.0",
+    "connect-pg-simple": "^9.0.0",
+    "csurf": "^1.11.0",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "express-mysql-session": "^3.0.0",
+    "express-session": "^1.17.3",
+    "helmet": "^7.0.0",
+    "hnswlib-node": "^1.4.2",
+    "jsonwebtoken": "^9.0.0",
+    "langchain": "^0.0.92",
+    "nginx": "^1.0.8",
+    "pdf-parse": "^1.1.1",
+    "twig": "^1.16.0",
+    "vuetify": "^3.3.5"
+  },
+  "devDependencies": {
+    "@types/node": "^20.3.0",
+    "prisma": "^4.15.0"
+  },
+  "type": "module"
+}
