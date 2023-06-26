@@ -2,13 +2,13 @@
 
 Ce projet est un site web
 
-| Contributeur | Maquette | Database | Front End | Back End | LLM |
-| ----------------- | --------------------- | --------------------- | --------------------- | --------------------- | --------------------- |
-| Alexandre Choplin | 0%                   | 30%                   | 30%                   | 30%                   | 30%
-| Romain Bedouret   | 0%                   | 30%                   | 30%                   | 30%                   | 30%
-| Cloé Magnien      | 0%                   | 30%                   | 30%                   | 30%                   | 30%
-| Bastien Oswald    | 100%                   | 30%                   | 30%                   | 30%                   | 30%
-| Andgel Barzana    | 0%                   | 30%                   | 30%                   | 30%                   | 30%
+| Contributeur | Maquette | Database | Front End | Back End | LLM | Documentation |
+| ----------------- | --------------------- | --------------------- | --------------------- | --------------------- | --------------------- | --------------------- |
+| Alexandre Choplin | 0%                    | 0%                    | 0%                    | 100%                  | 100%                  | 0%                    |
+| Romain Bedouret   | 0%                    | 0%                    | 200%                  | 0%                    | 0%                    | 0%                    |
+| Cloé Magnien      | 0%                    | 100%                  | 0%                    | 0%                    | 0%                    | 0%                    |
+| Bastien Oswald    | 100%                  | 0%                    | 80%                   | 0%                    | 0%                    | 0%                    |
+| Andgel Barzana    | 0%                    | 0%                    | 0%                    | 0%                    | 0%                    | 100%                  |
 
 ## Démarrage
 
