@@ -2,14 +2,14 @@
 
 Ce projet est un site web
 
-| Contributeur | Maquette | Database | Front End | Back End | LLM | Documentation |
-| ----------------- | --------------------- | --------------------- | --------------------- | --------------------- | --------------------- | --------------------- |
-| Alexandre Choplin | 0%                    | 0%                    | 0%                    | 100%                  | 100%                  | 0%                    |
-| Romain Bedouret   | 0%                    | 0%                    | 20%                   | 0%                    | 0%                    | 0%                    |
-| Cloé Magnien      | 0%                    | 100%                  | 0%                    | 0%                    | 0%                    | 0%                    |
-| Bastien Oswald    | 100%                  | 0%                    | 80%                   | 0%                    | 0%                    | 0%                    |
-| Andgel Barzana    | 0%                    | 0%                    | 0%                    | 0%                    | 0%                    | 100%                  |
-
+| Contributeur      | Alexandre Choplin     | Romain Bedouret       | Cloé Magnien          | Bastien Oswald        | Andgel Barzana        |
+| ----------------- | --------------------- | --------------------- | --------------------- | --------------------- | --------------------- |
+| Maquette          | 0%                    | 0%                    | 0%                    | 100%                  | 0%                    |
+| Database          | 0%                    | 0%                    | 100%                  | 0%                    | 0%                    |
+| Front End         | 0%                    | 30%                   | 0%                    | 70%                   | 0%                    |
+| Back End          | 0%                    | 0%                    | 0%                    | 0%                    | 0%                    |
+| LLM               | 100%                  | 0%                    | 0%                    | 0%                    | 0%                    |
+| Documentation     | 0%                    | 0%                    | 0%                    | 0%                    | 100%                  |
 ## Démarrage
 
 Le projet est accessible sur le site [GiGraph](https://gigraph.fr)
