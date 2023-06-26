@@ -33,6 +33,7 @@ Le projet est accessible sur le site [GiGraph](https://gigraph.fr)
 ### Outils externes
 * [GitHub](https://github.com/Voolak/GiGraph) - Dépôt
 * [Figma](https://www.figma.com) - Créateur d'interfaces graphiques (maquette)
+* [LudicApp](https://lucid.app) - Outil de groupe visuel (Schéma Database)
 
 ## Contributeurs
 Liste des [contributeurs](https://github.com/Voolak/GiGraph/contributors) du projet :
