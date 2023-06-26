@@ -2,13 +2,13 @@
 
 Ce projet est un site web
 
-| Contributeur | Front | Back |
-| ----------------- | --------------------- | --------------------- 
-| Alexandre Choplin | 30%                   |
-| Romain Bedouret   | 25%                   |
-| Cloé Magnien      | 20%                   |
-| Bastien Oswald    | 15%                   |
-| Andgel Barzana    | 10%                   |
+| Contributeur | Maquette | Database | Front End | Back End | LLM |
+| ----------------- | --------------------- | --------------------- | --------------------- | --------------------- | --------------------- |
+| Alexandre Choplin | 0%                   | 30%                   | 30%                   | 30%                   | 30%
+| Romain Bedouret   | 0%                   | 30%                   | 30%                   | 30%                   | 30%
+| Cloé Magnien      | 0%                   | 30%                   | 30%                   | 30%                   | 30%
+| Bastien Oswald    | 100%                   | 30%                   | 30%                   | 30%                   | 30%
+| Andgel Barzana    | 0%                   | 30%                   | 30%                   | 30%                   | 30%
 
 ## Démarrage
 
@@ -16,9 +16,23 @@ Le projet est accessible sur le site [GiGraph](https://gigraph.fr)
 
 ## Fabriqué avec
 
-Entrez les programmes/logiciels/ressources que vous avez utilisé pour développer votre projet
-
-* [LangChain](https://github.com/hwchase17/langchainjs) - Framework JS LLM (back-end)
+### Back-end
+* [LangChain](https://github.com/hwchase17/langchainjs) - Framework JS LLM
+* [hnswlib](https://js.langchain.com/docs/modules/indexes/vector_stores/integrations/hnswlib) - Librairie Vectorstore
+### Front-end
+* [Expressjs](https://expressjs.com) - Framework JS
+* [Vue.js](https://vuejs.org) - Framework JS
+* [Vuetify](https://vuetifyjs.com) - Librairie UI
+* [Echart](https://echarts.apache.org) - Librairie Visualisation JS
+### Logiciels
+* [Node.js](https://nodejs.org) - (version 1.18 minimum)
+* [Python](https://www.python.org) - (version 3.10.11 minimum)
+### Database
+* [Prisma](https://www.prisma.io) - ORM
+* [MySQL](https://www.mysql.com) - Database
+### Outils externes
+* [GitHub](https://github.com/Voolak/GiGraph) - Dépôt
+* [Figma](https://www.figma.com) - Créateur d'interfaces graphiques (maquette)
 
 ## Contributeurs
 Liste des [contributeurs](https://github.com/Voolak/GiGraph/contributors) du projet :
