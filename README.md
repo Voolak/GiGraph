@@ -2,13 +2,13 @@
 
 Ce projet est un site web
 
-| Contributeur | Alexandre Choplin | Romain Bedouret | Cloé Magnien | Bastien Oswald | Andgel Barzana |
+| Contributeur | Maquette | Database | Front End | Back End | LLM |
 | ----------------- | --------------------- | --------------------- | --------------------- | --------------------- | --------------------- |
-| Alexandre Choplin | 30%                   | 30%                   | 30%                   | 30%                   | 30%
-| Romain Bedouret   | 200%                   | 30%                   | 30%                   | 30%                   | 30%
-| Cloé Magnien      | 20%                   | 30%                   | 30%                   | 30%                   | 30%
-| Bastien Oswald    | 15%                   | 30%                   | 30%                   | 30%                   | 30%
-| Andgel Barzana    | 10%                   | 30%                   | 30%                   | 30%                   | 30%
+| Alexandre Choplin | 0%                   | 30%                   | 30%                   | 30%                   | 30%
+| Romain Bedouret   | 0%                   | 30%                   | 30%                   | 30%                   | 30%
+| Cloé Magnien      | 0%                   | 30%                   | 30%                   | 30%                   | 30%
+| Bastien Oswald    | 100%                   | 30%                   | 30%                   | 30%                   | 30%
+| Andgel Barzana    | 0%                   | 30%                   | 30%                   | 30%                   | 30%
 
 ## Démarrage
 
