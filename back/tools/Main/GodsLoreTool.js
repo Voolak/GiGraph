@@ -1,15 +1,15 @@
 import { Tool } from "langchain/tools";
-import { GodsLoreChain } from "../../chains/Main/GodsLoreChain.js";
+import { DocumentAnsweringChain } from "../../chains/Main/DocumentAnsweringChain.js";
 
-export class GodsLoreTool extends Tool {
-    name = "gods-lore";
+export class DocumentAnsweringTool extends Tool {
+    name = "graph-generator";
   
-    description = "This tool answer questions about the Lore of GODS a Tabletop RPG Game.";
+    description = "This tool generates graphs from a question.";
   
     async _call(arg){
       try {
         // Perform your custom tool logic here with the input text
-        var chain = await new GodsLoreChain().call(arg);
+        var chain = await new DocumentAnsweringChain().call(arg);
         // and return the output text
         return `Réponse: ${chain.res}`;
       } catch (error) {
