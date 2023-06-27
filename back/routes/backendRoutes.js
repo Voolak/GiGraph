@@ -11,6 +11,6 @@ router.use(express.json());
 // Add GET route for embedding
 router.get('/embedding', getEmbedding);
 
-router.get('/agent', Agentcall);
+router.post('/agent', Agentcall);
 
 export default router;

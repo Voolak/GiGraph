@@ -2,9 +2,9 @@ import { OpenAI } from "langchain/llms/openai";
 import { HNSWLib } from "langchain/vectorstores/hnswlib";
 import { OpenAIEmbeddings } from "langchain/embeddings/openai";
 import { BaseChain } from "langchain/chains";
-import { getUserId } from "../controllers/globals.js";
+import { getUserId } from "../../controllers/globals.js";
 
-export class GodsLoreChain extends BaseChain {
+export class DocumentAnsweringChain extends BaseChain {
   _chainType() {
     throw new Error("Method not implemented.");
   }

@@ -4,21 +4,29 @@ import { initializeAgentExecutorWithOptions } from "langchain/agents";
 import { Calculator } from "langchain/tools/calculator";
 import { DynamicStructuredTool } from "langchain/tools";
 import { setUserId } from "../controllers/globals.js";
+import { DocumentAnsweringChain } from "../chains/Main/DocumentAnsweringChain.js";
 
 export const run = async (question, userId) => {
   setUserId(userId);
   const model = new ChatOpenAI({ temperature: 0 });
   const tools = [
-    new Calculator(), // Older existing single input tools will still work
     new DynamicStructuredTool({
-      name: "random-number-generator",
-      description: "generates a random number between two input numbers",
+      name: "graph-generator",
+      description: "This tool generates graphs from a question.",
       schema: z.object({
-        low: z.number().describe("The lower bound of the generated number"),
-        high: z.number().describe("The upper bound of the generated number"),
+        text: z.string().describe("the question")
       }),
-      func: async ({ low, high }) =>
-        (Math.random() * (high - low) + low).toString(), // Outputs still must be strings
+      func: async ({ string }) =>{
+        try {
+          // Perform your custom tool logic here with the input text
+          var chain = await new DocumentAnsweringChain().call(string);
+          // and return the output text
+          return `Réponse: ${chain.res}`;
+        } catch (error) {
+          // Handle any errors that occur during the processing
+          return `Error occurred: ${error.message}`;
+        }
+      }
     }),
   ];
 

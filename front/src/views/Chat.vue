@@ -5,6 +5,7 @@
                 <img class="ma-11 mb-2" src="../assets/logo.png" alt="logo" style="height: 100px">
                 <v-list color="transparent">
                     <v-list-item prepend-icon="mdi-account-box" title="Bastien Oswald" class="mb-7"></v-list-item>
+                    <v-btn class="ajouter" @click="ouvrirGestionnaireFichiers">Ajouter un document</v-btn>
                     <v-card class="mx-auto" max-width="400">
                         <v-list :items="documents"></v-list>
                     </v-card>
@@ -26,40 +27,55 @@
             </v-navigation-drawer>
             <v-main style="height: 100vh">
                 <div class="messages">
-                    <div v-for="message in messages" class="mb-5">
-
-                        <v-row v-if="message.type == 0">
-                            <b-col><v-icon size="x-large" color="green-darken-2" icon="mdi-account-box"
-                                    class="mx-8"></v-icon></b-col>
-                            <b-col>
-                                <p>{{ message.message }}</p>
-                            </b-col>
-                        </v-row>
-                        <v-row v-if="message.type == 1" style="justify-content: end;">
-                            <b-col class="text-right">
-
-                                <p v-if="message.loading == true"><v-progress-circular color="primary"
-                                        indeterminate></v-progress-circular></p>
-                                <p v-if="message.loading == false">{{ message.message }}</p>
-                            </b-col>
+                    <div v-for="message in messages" class="mb-12">
+                        <v-row v-if="message.type == 1">
                             <b-col class="text-right"><img class="mx-5 mb-2" src="../assets/logo.png" alt="logo"
                                     style="height: 30px"></b-col>
+                            <b-col>
+                                <p v-if="message.loading == false">{{ message.message }}</p>
+                                <p v-if="message.loading == true"><v-progress-circular color="primary"
+                                        indeterminate></v-progress-circular></p>
+                            </b-col>
+                        </v-row>
+                        <v-row v-if="message.type == 0" style="justify-content: end;">
+                            <b-col class="text-right">
+                                <p>{{ message.message }}</p>
+                            </b-col>
+                            <b-col><v-icon size="x-large" color="green-darken-2" icon="mdi-account-box"
+                                    class="mx-8"></v-icon></b-col>
+
                         </v-row>
                     </div>
 
                 </div>
-                <v-row class="ask" align="center" justify="center">
-                    <div class="col">
-                        <v-select label="Select" class="select"
-                            :items="['California', 'Colorado', 'Florida', 'Georgia', 'Texas', 'Wyoming']"></v-select>
-                    </div>
-                    <v-textarea class="mx-12" counter label="Posez votre question ici" maxlength="50" single-line
-                        v-model="question"></v-textarea>
-                    <v-col cols="auto">
-                        <v-btn :disabled="loading" @click="postMessage()" icon="mdi-send" size="x-large"
-                            color="deep-purple"></v-btn>
-                    </v-col>
-                </v-row>
+                <v-form validate-on="submit lazy" @submit.prevent="submit" style="width: ;">
+                    <v-row class="ask" align="center" justify="center">
+                        <div class="col">
+                            <v-select :items="items2" item-value="value" item-text="text"
+                                :menu-props="{ offsetY: true, closeOnContentClick: false }">
+                                <template #selection="{ item }">
+                                    <v-img src="../assets/logo.png" max-height="20" max-width="20"></v-img>
+                                </template>
+                                <template #item="{ item }">
+                                    <v-list-item-avatar>
+                                        <v-img src="../assets/logo.png" max-height="20" max-width="20"></v-img>
+                                    </v-list-item-avatar>
+                                    <v-list-item-content>
+                                        <v-list-item-title>{{ item.value }}</v-list-item-title>
+                                    </v-list-item-content>
+                                </template>
+                            </v-select>
+                        </div>
+                        <!-- <v-textarea class="mx-12" counter label="Posez votre question ici" maxlength="50" single-line
+                        v-model="question"></v-textarea> -->
+                        <v-textarea v-model="question" hide-details class="mx-14" variant="filled" auto-grow
+                            label="Two rows" rows="2" row-height="20"></v-textarea>
+                        <v-col cols="auto">
+                            <v-btn type="submit" :disabled="loading" @click="postMessage()" icon="mdi-send" size="x-large"
+                                color="deep-purple"></v-btn>
+                        </v-col>
+                    </v-row>
+                </v-form>
             </v-main>
         </v-layout>
     </v-card>
@@ -106,9 +122,12 @@ const discussions = ref([
 
 
 async function postMessage() {
-    loading.value = true;
+    if(question.value != ""){
+        loading.value = true;
     messages.value.push({ 'message': question.value, 'type': 0 });
-    messages.value.push({ 'message': "ta gueule enfete", 'type': 1, 'loading': true });
+    messages.value.push({ 'message': "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean consequat nibh eget metus consequat volutpat", 'type': 1, 'loading': true });
+
+    question.value = ""
 
     await new Promise(r => setTimeout(r, 2000));
 
@@ -116,26 +135,29 @@ async function postMessage() {
     lastMessage.loading = false;
     loading.value = false;
 
+    // const chatContainer = document.querySelectorAll('.messages')[0];
+    // chatContainer.scrollTop = chatContainer.scrollHeight
+    }
+
 }
 
 </script>
 
 <style>
 .messages {
-    padding: 2.5vw;
-    height: calc(100vh - 230px);
-    overflow: auto
+    padding: 5vh 5vw;
+    height: calc(100vh - 240px);
+    overflow: auto;
 }
 
 .ask {
-    height: 180px;
     display: flex;
     justify-content: center;
-    width: calc(100% - 300px);
+    align-items: center;
+    width: 50vw;
     position: absolute;
-    bottom: 30px;
-    left: 300px;
-
+    bottom: 5vh;
+    left: 32vw;
 }
 
 .select {
