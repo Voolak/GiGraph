@@ -10,14 +10,14 @@ export async function getEmbedding(req, res) {
         await embedRules();
 
         //Render OK
-        res.render('../views/embedding.html.twig');
+        res.status(500).send("Error processing request");
 
     } catch (error) {
       console.error(error);
       res.status(500).send("Error processing request");
     }
   }else{
-    res.render('../views/login.html.twig');
+    res.status(500).send("Error processing request");
   }
 }
 

@@ -11,6 +11,6 @@ export async function Agentcall(req, res) {
       res.status(500).send("Error processing request");
     }
   }else{
-    res.render('../views/login.html.twig');
+    res.status(500).send("Error processing request");
   }
 }

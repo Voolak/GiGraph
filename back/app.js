@@ -33,7 +33,6 @@ app.use(
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
 app.use('/auth', authRoutes); // Add this line for authentication routes
 app.use('/backend', backendRoutes);
 
