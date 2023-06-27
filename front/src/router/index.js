@@ -29,6 +29,9 @@
 
 const Home = () => import('@/views/Home.vue')
 const Chat = () => import('@/views/Chat.vue')
+const Login = () => import('@/views/Login.vue')
+const Chatbis = () => import('@/views/Chatbis.vue')
+
 // const Default = () => import('@/layouts/default/Default.vue')
 // const Details = () => import('@/views/Details.vue')
 
@@ -42,6 +45,12 @@ const router = [
   },
   {
     path: '/chat', component: Chat, name: 'Chat',
+  },
+  {
+    path: '/login', component: Login, name: 'Login',
+  },
+  {
+    path: '/Chatbis', component: Chatbis, name: 'Chatbis',
   },
 ]
 
