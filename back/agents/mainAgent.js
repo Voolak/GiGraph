@@ -3,8 +3,10 @@ import { ChatOpenAI } from "langchain/chat_models/openai";
 import { initializeAgentExecutorWithOptions } from "langchain/agents";
 import { Calculator } from "langchain/tools/calculator";
 import { DynamicStructuredTool } from "langchain/tools";
+import { setUserId } from "../controllers/globals.js";
 
 export const run = async (question, userId) => {
+  setUserId(userId);
   const model = new ChatOpenAI({ temperature: 0 });
   const tools = [
     new Calculator(), // Older existing single input tools will still work
@@ -26,7 +28,7 @@ export const run = async (question, userId) => {
   });
   console.log("Loaded agent.");
 
-  const input = `What is a random number between 5 and 10 raised to the second power?`;
+  const input = question;
 
   console.log(`Executing with input "${input}"...`);
 

@@ -11,3 +11,67 @@ datasource db {
     provider = "mysql"
     url      = env("DATABASE_URL")
 }
+
+model User {
+    id                  Int                 @id @default(autoincrement())
+    created_at          DateTime            @default(now())
+    firstname           String?
+    lastname            String?
+    email               String              @unique
+    password            String
+    exchanges           Exchange[]
+    groups              Group[]
+}
+
+model Exchange {
+    id                  Int                 @id @default(autoincrement())
+    prompts             Prompt[]           
+    answers             Answer[]
+    graphs              Graph[]
+    user                User                @relation(fields: [userId], references: [id])
+    userId              Int                 // relation scalar field  (used in the `@relation` attribute above)
+}
+
+model Prompt {
+    id                  Int                 @id @default(autoincrement())
+    entry               String
+    exchange            Exchange            @relation(fields: [exchangeId], references: [id])
+    exchangeId          Int                 
+    created_at          DateTime            @default(now())
+}
+
+model Answer {
+    id                  Int                 @id @default(autoincrement())
+    output              String
+    exchange            Exchange            @relation(fields: [exchangeId], references: [id])
+    exchangeId          Int                 
+    created_at          DateTime            @default(now())
+}
+
+model Graph {
+    id                  Int                 @id @default(autoincrement())
+    type                String
+    code                String
+    data                String              @default("{}")
+    exchange            Exchange            @relation(fields: [exchangeId], references: [id])
+    exchangeId          Int                 
+    created_at          DateTime            @default(now())
+}
+
+model Group {
+    id                  Int                 @id @default(autoincrement())
+    name                String
+    user                User                @relation(fields: [userId], references: [id])
+    userId              Int
+    documents           Document[]
+    created_at          DateTime            @default(now())
+}
+
+model Document {
+    id                  Int                 @id @default(autoincrement())
+    name                String
+    group               Group               @relation(fields: [groupId], references: [id])
+    groupId             Int
+    created_at          DateTime            @default(now())
+    data                String              @default("{}")
+}

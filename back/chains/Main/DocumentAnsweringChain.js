@@ -2,6 +2,7 @@ import { OpenAI } from "langchain/llms/openai";
 import { HNSWLib } from "langchain/vectorstores/hnswlib";
 import { OpenAIEmbeddings } from "langchain/embeddings/openai";
 import { BaseChain } from "langchain/chains";
+import { getUserId } from "../controllers/globals.js";
 
 export class GodsLoreChain extends BaseChain {
   _chainType() {
@@ -14,6 +15,9 @@ export class GodsLoreChain extends BaseChain {
   outputKeys = ["res"];
 
   async _call(inputs) {
+
+    const userId = getUserId();
+
     const vectorStore = await getVectorStore();
 
     const model = new OpenAI({
@@ -28,7 +32,6 @@ export class GodsLoreChain extends BaseChain {
     for (const key in inputs) {
       sanitizedQuestion += inputs[key];
     }
-
 
     const retrievedContext = await vectorStore.similaritySearch(
       sanitizedQuestion,

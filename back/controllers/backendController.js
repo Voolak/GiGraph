@@ -6,7 +6,6 @@ import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 export async function getEmbedding(req, res) {
   if (req.session.userId != "undefined" && req.session.userId != ""  && req.session.userId != null){
     try {
-
         await embedPDF();
         await embedRules();
 
