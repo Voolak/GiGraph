@@ -2,7 +2,12 @@
     <v-card>
         <v-layout>
             <v-navigation-drawer class="bg-deep-purple pa-2" theme="dark" permanent>
-                <img class="ma-11 mb-2" src="../assets/logo.png" alt="logo" style="height: 100px">
+                <!-- <img class="ma-11 mb-2" src="../assets/logo.png" alt="logo" style="height: 100px"> -->
+                <v-img
+                    :width="300"
+                    cover
+                    src="../assets/logo.png"
+                ></v-img>
                 <v-list color="transparent">
                     <v-list-item prepend-icon="mdi-account-box" title="Bastien Oswald" class="mb-7"></v-list-item>
                     <v-btn class="ajouter" @click="ouvrirGestionnaireFichiers">Ajouter un document</v-btn>
