@@ -72,7 +72,7 @@ model Group {
     userId     Int
     documents  Document[]
     created_at DateTime   @default(now())
-    directory  String 
+    directory  String
 }
 
 model Document {
@@ -81,5 +81,5 @@ model Document {
     group      Group    @relation(fields: [groupId], references: [id])
     groupId    Int
     created_at DateTime @default(now())
-    directory  String  
+    directory  String
 }
