@@ -7,8 +7,14 @@
                     <v-list-item prepend-icon="mdi-account-box" title="Bastien Oswald" class="mb-7"></v-list-item>
                     <v-btn class="ajouter" @click="ouvrirGestionnaireFichiers">Ajouter un document</v-btn>
                     <v-card class="mx-auto" max-width="400">
-                        <v-list :items="items"></v-list>
+                        <v-list :items="documents"></v-list>
                     </v-card>
+                    <v-btn class="my-5">
+                            Traiter les documents
+                    </v-btn>
+                    <!-- <v-card class="mx-auto" max-width="400">
+                        <v-list :items="discussions"></v-list>
+                    </v-card> -->
                 </v-list>
 
                 <template v-slot:append>
@@ -82,8 +88,8 @@ const question = ref("");
 const messages = ref([])
 const loading = ref(false);
 
-const items = ref([
-    { type: 'subheader', title: 'Vos ducuments' },
+const documents = ref([
+    { type: 'subheader', title: 'Vos documents' },
     {
         title: 'Item #1',
         value: 1,
@@ -95,8 +101,10 @@ const items = ref([
     {
         title: 'Item #3',
         value: 3,
-    },
-    { type: 'divider' },
+    }
+],);
+
+const discussions = ref([
     { type: 'subheader', title: 'Vos dicussions' },
     {
         title: 'Item #4',
@@ -111,6 +119,7 @@ const items = ref([
         value: 6,
     },
 ],);
+
 
 async function postMessage() {
     if(question.value != ""){
