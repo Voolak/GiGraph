@@ -4,11 +4,13 @@
             <v-navigation-drawer class="bg-deep-purple pa-2" theme="dark" permanent>
                 <img class="ma-11 mb-2" src="../assets/logo.png" alt="logo" style="height: 100px">
                 <v-list color="transparent">
-                    <v-list-item prepend-icon="mdi-account-box" title="Romain Bedouret"></v-list-item>
-                    <v-btn class="ajouter" @click="ouvrirGestionnaireFichiers">Ajouter un document</v-btn>
-                    <v-card class="mx-auto">
-                        <v-list :items="items"></v-list>
-                    </v-card>
+                    <v-list-item prepend-icon="mdi-account-box" title="Romain Bedouret"></v-list-item>  
+                    <div>
+                        <v-file-input prepend-icon="" v-model="files" label="Ajouter un document" variant="solo-filled" @change="ajouterDocument"></v-file-input>
+                        <v-card class="mx-auto">
+                          <v-list :items="items"></v-list>
+                        </v-card>
+                      </div>
                 </v-list>
 
                 <template v-slot:append>
@@ -58,55 +60,20 @@
 import { reactive, ref, onMounted } from "vue";
 
 const question = ref("");
-const messages = ref([])
-const items = ref([
-    { type: 'subheader', title: 'Vos ducuments' },
-    {
-        title: 'Item #1',
-        value: 1,
-    },
-    {
-        title: 'Item #2',
-        value: 2,
-    },
-    {
-        title: 'Item #3',
-        value: 3,
-    },
-    { type: 'divider' },
-    { type: 'subheader', title: 'Vos dicussions' },
-    {
-        title: 'Item #4',
-        value: 4,
-    },
-    {
-        title: 'Item #5',
-        value: 5,
-    },
-    {
-        title: 'Item #6',
-        value: 6,
-    },
-],);
+const messages = ref([]);
+const files = ref([]);
+const items = ref([]);
 
 function postMessage() {
     messages.value.push({ 'message': question.value, 'type': 0 })
     messages.value.push({ 'message': "ta gueule enfete", 'type': 1 })
 }
-</script>
 
-<script>
-export default {
-  methods: {
-    ouvrirGestionnaireFichiers() {
-      const input = document.createElement('input');
-      input.type = 'file';
-      input.accept = '.pdf,.csv,.sql';
-      input.click();
-    }
-  }
+function ajouterDocument() {
+  items.value.push(files.value[files.value.length - 1].name);
 }
 </script>
+
 
 <style>
 .messages {
