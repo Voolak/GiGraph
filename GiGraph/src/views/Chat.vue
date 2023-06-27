@@ -31,9 +31,13 @@
                         </v-row>
                         <v-row v-if="message.type == 1" style="justify-content: end;">
                             <b-col class="text-right">
-                                <p>{{ message.message }}</p>
+
+                                <p v-if="message.loading == true"><v-progress-circular color="primary"
+                                        indeterminate></v-progress-circular></p>
+                                <p v-if="message.loading == false">{{ message.message }}</p>
                             </b-col>
-                            <b-col class="text-right"><img class="ma-11 mb-2" src="../assets/logo.png" alt="logo" style="height: 30px"></b-col>
+                            <b-col class="text-right"><img class="mx-5 mb-2" src="../assets/logo.png" alt="logo"
+                                    style="height: 30px"></b-col>
                         </v-row>
                     </div>
 
@@ -46,7 +50,8 @@
                     <v-textarea class="mx-12" counter label="Posez votre question ici" maxlength="50" single-line
                         v-model="question"></v-textarea>
                     <v-col cols="auto">
-                        <v-btn @click="postMessage()" icon="mdi-send" size="x-large" color="deep-purple"></v-btn>
+                        <v-btn :disabled="loading" @click="postMessage()" icon="mdi-send" size="x-large"
+                            color="deep-purple"></v-btn>
                     </v-col>
                 </v-row>
             </v-main>
@@ -59,6 +64,8 @@ import { reactive, ref, onMounted } from "vue";
 
 const question = ref("");
 const messages = ref([])
+const loading = ref(false);
+
 const items = ref([
     { type: 'subheader', title: 'Vos ducuments' },
     {
@@ -89,9 +96,17 @@ const items = ref([
     },
 ],);
 
-function postMessage() {
-    messages.value.push({ 'message': question.value, 'type': 0 })
-    messages.value.push({ 'message': "ta gueule enfete", 'type': 1 })
+async function postMessage() {
+    loading.value = true;
+    messages.value.push({ 'message': question.value, 'type': 0 });
+    messages.value.push({ 'message': "ta gueule enfete", 'type': 1, 'loading': true });
+
+    await new Promise(r => setTimeout(r, 2000));
+
+    const lastMessage = messages.value[messages.value.length - 1];
+    lastMessage.loading = false;
+    loading.value = false;
+
 }
 
 </script>
@@ -99,10 +114,12 @@ function postMessage() {
 <style>
 .messages {
     padding: 2.5vw;
-  height:50vh;
+    height: calc(100vh - 230px);
+    overflow: auto
 }
 
 .ask {
+    height: 180px;
     display: flex;
     justify-content: center;
     width: calc(100% - 300px);
