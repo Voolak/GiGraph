@@ -9,7 +9,6 @@ import {
 } from "langchain/document_loaders/fs/json";
 import { TextLoader } from "langchain/document_loaders/fs/text";
 import { CSVLoader } from "langchain/document_loaders/fs/csv";
-import { PDFLoader } from "langchain/document_loaders/fs/pdf";
 import { DocxLoader } from "langchain/document_loaders/fs/docx";
 
 export async function getEmbedding(req, res) {
@@ -54,6 +53,6 @@ export async function getEmbedding(req, res) {
     const vectorStore = await HNSWLib.fromDocuments(docs, new OpenAIEmbeddings());
 
     // Save the vector store to a directory
-    const directory = 'data/VectorStores/rules/';
-    await vectorStore.save(directory);
+    const directoryfor = 'data/VectorStores/rules/';
+    await vectorStore.save(directoryfor);
   }
