@@ -29,8 +29,12 @@
     "vuetify": "^3.3.5"
   },
   "devDependencies": {
+    "@getbigger-io/prisma-fixtures-cli": "^2.0.1",
     "@types/node": "^20.3.0",
     "prisma": "^4.15.0"
   },
-  "type": "module"
+  "type": "module",
+  "prisma": {
+    "seed": "node seed.js"
+  }
 }
