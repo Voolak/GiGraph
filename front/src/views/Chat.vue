@@ -166,10 +166,23 @@ async function postMessage() {
 
 function ajouterDocument() {
     documents.value.push(files.value[files.value.length - 1].name);
-    
-    axios.post('/upload-document', {
-        name: files.value[files.value.length - 1].name
-    })
+
+    console.log(files.value[files.value.length - 1]);
+
+    const options = {
+        method: 'POST',
+        url: 'http://127.0.0.1:3000/backend/upload-document',
+        headers: { 'Content-Type': files.value[files.value.length - 1].type },
+        data: {
+            name: files.value[files.value.length - 1].name
+        }
+    };
+
+    axios.request(options).then(function (response) {
+        console.log(response.data.res)
+    }).catch(function (error) {
+        console.error(error);
+    });
 
     afficherDocuments();
 }
