@@ -3,15 +3,12 @@
         <v-layout>
             <v-navigation-drawer class="bg-blue pa-2" permanent>
                 <!-- <img class="ma-11 mb-2" src="../assets/logo.png" alt="logo" style="height: 100px"> -->
-                <v-img 
-                    class="mx-16"
-                    :width="100"
-                    cover
-                    src="../assets/logo.png"
-                ></v-img>
+                <v-img class="mx-16" :width="100" cover src="../assets/logo.png"></v-img>
                 <v-list color="transparent">
                     <v-list-item prepend-icon="mdi-account-box" title="Bastien Oswald" class="mb-7"></v-list-item>
-                    <v-file-input prepend-icon="" v-model="files" label="AJOUTER UN DOCUMENT" variant="solo-filled" multiple accept=".pdf,.csv,.sql" @change="ajouterDocument" class="custom-label"></v-file-input>                    <v-card class="mx-auto" max-width="400">
+                    <v-file-input prepend-icon="" v-model="files" label="AJOUTER UN DOCUMENT" variant="solo-filled" multiple
+                        accept=".pdf,.csv,.sql" @change="ajouterDocument" class="custom-label"></v-file-input> <v-card
+                        class="mx-auto" max-width="400">
                         <v-list v-show="showdocuments">
                             <v-card v-for="(document, index) in documents" :key="index" class="mx-auto" max-width="400">
                                 <v-list-item>
@@ -36,7 +33,7 @@
                     </v-btn>
                 </v-list>
 
-                
+
 
                 <template v-slot:append>
                     <div class="pa-2">
@@ -90,8 +87,8 @@
                         <!-- <v-textarea class="mx-12" counter label="Posez votre question ici" maxlength="50" single-line
                         v-model="question"></v-textarea> -->
                         <div class="col chat">
-                        <v-select label="Select" class="select"
-                            :items="['California', 'Colorado', 'Florida', 'Georgia', 'Texas', 'Wyoming']"></v-select>
+                            <v-select label="Select" class="select"
+                                :items="['California', 'Colorado', 'Florida', 'Georgia', 'Texas', 'Wyoming']"></v-select>
                         </div>
                         <v-textarea v-model="question" hide-details class="mx-14 chat " variant="filled" auto-grow
                             label="Envoyer un message" rows="2" row-height="20"></v-textarea>
@@ -109,6 +106,7 @@
 <script setup>
 import { reactive, ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
+import axios from "axios";
 
 const router = useRouter()
 
@@ -129,22 +127,36 @@ const discussions = ref([
 ],);
 
 function goBack() {
-  router.push({ name: "Login" });
+    router.push({ name: "Login" });
 }
 
 async function postMessage() {
     if (question.value != "") {
-        loading.value = true;
         messages.value.push({ 'message': question.value, 'type': 0 });
-        messages.value.push({ 'message': "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean consequat nibh eget metus consequat volutpat", 'type': 1, 'loading': true });
+        messages.value.push({ 'message': "", 'type': 1, 'loading': true });
+        loading.value = true;
+        const options = {
+            method: 'POST',
+            url: 'http://127.0.0.1:3000/backend/agent',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            data: {
+                prompt: question.value
+            }
+        };
 
-        question.value = ""
+        axios.request(options).then(function (response) {
+            // console.log(response.data.res)
+            messages.value.pop()
+            messages.value.push({ 'message': response.data.res.output, 'type': 1, 'loading': false });
 
-        await new Promise(r => setTimeout(r, 2000));
+            question.value = ""
+            const lastMessage = messages.value[messages.value.length - 1];
+            lastMessage.loading = false;
+            loading.value = false;
+        }).catch(function (error) {
+            console.error(error);
+        });
 
-        const lastMessage = messages.value[messages.value.length - 1];
-        lastMessage.loading = false;
-        loading.value = false;
 
         // const chatContainer = document.querySelectorAll('.messages')[0];
         // chatContainer.scrollTop = chatContainer.scrollHeight
@@ -180,10 +192,11 @@ function traiterDocuments() {
 </script>
 
 <style>
-.chat{
+.chat {
     background-color: rgba(33, 150, 243, 0.1);
 
 }
+
 .custom-label .v-label {
     opacity: 1 !important;
 }
