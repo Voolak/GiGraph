@@ -404,7 +404,7 @@ function ajouterDocument() {
 
     const options = {
         method: 'POST',
-        url: 'http://127.0.0.1:3000/backend/upload-document',
+        url: 'http://127.0.0.1:3306/backend/upload-document',
         headers: { 'Content-Type': files.value[files.value.length - 1].type },
         data: {
             name: files.value[files.value.length - 1].name
