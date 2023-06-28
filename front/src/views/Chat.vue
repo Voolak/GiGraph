@@ -10,7 +10,7 @@
                         <v-list :items="documents"></v-list>
                     </v-card>
                     <v-btn class="my-5">
-                            Traiter les documents
+                        Traiter les documents
                     </v-btn>
                     <!-- <v-card class="mx-auto" max-width="400">
                         <v-list :items="discussions"></v-list>
@@ -122,21 +122,21 @@ const discussions = ref([
 
 
 async function postMessage() {
-    if(question.value != ""){
+    if (question.value != "") {
         loading.value = true;
-    messages.value.push({ 'message': question.value, 'type': 0 });
-    messages.value.push({ 'message': "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean consequat nibh eget metus consequat volutpat", 'type': 1, 'loading': true });
+        messages.value.push({ 'message': question.value, 'type': 0 });
+        messages.value.push({ 'message': "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean consequat nibh eget metus consequat volutpat", 'type': 1, 'loading': true });
 
-    question.value = ""
+        question.value = ""
 
-    await new Promise(r => setTimeout(r, 2000));
+        await new Promise(r => setTimeout(r, 2000));
 
-    const lastMessage = messages.value[messages.value.length - 1];
-    lastMessage.loading = false;
-    loading.value = false;
+        const lastMessage = messages.value[messages.value.length - 1];
+        lastMessage.loading = false;
+        loading.value = false;
 
-    // const chatContainer = document.querySelectorAll('.messages')[0];
-    // chatContainer.scrollTop = chatContainer.scrollHeight
+        // const chatContainer = document.querySelectorAll('.messages')[0];
+        // chatContainer.scrollTop = chatContainer.scrollHeight
     }
 
 }
