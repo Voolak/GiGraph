@@ -6,12 +6,13 @@ import authRoutes from './routes/authRoutes.js';
 import expressSession from 'express-session';
 import { PrismaClient } from '@prisma/client';
 import { PrismaSessionStore } from '@quixo3/prisma-session-store';
+import cors from 'cors';
 
 dotenv.config({ path: `.env.local`, override: true });
 
 const app = express();
 app.use(helmet());
-
+app.use(cors()); // Add this line for CORS
 app.use(
   expressSession({
     cookie: {
