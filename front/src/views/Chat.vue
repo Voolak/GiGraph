@@ -5,7 +5,8 @@
                 <v-img class="mx-16" :width="100" cover src="../assets/logo.png"></v-img>
                 <v-list color="transparent">
                     <v-list-item prepend-icon="mdi-account-box" title="Bastien Oswald" class="mb-7"></v-list-item>
-                    <v-file-input prepend-icon="" v-model="files" label="AJOUTER UN DOCUMENT" variant="solo-filled" multiple accept=".pdf,.csv,.sql" @change="ajouterDocument" class="custom-label"></v-file-input>                    <v-card class="mx-auto" max-width="400">
+                    <v-file-input prepend-icon="" v-model="files" label="AJOUTER UN DOCUMENT" variant="solo-filled" multiple accept=".pdf,.csv,.sql" @change="ajouterDocument" class="custom-label"></v-file-input>
+                    <v-card class="mx-auto" max-width="400">
                         <v-list v-show="showdocuments">
                             <v-card v-for="(document, index) in documents" :key="index" class="mx-auto" max-width="400">
                                 <v-list-item>
@@ -14,8 +15,8 @@
                                       <template v-else>
                                         <v-list-item-subtitle>{{ document }}</v-list-item-subtitle>
                                         <v-list-item-action class="align-right">
-                                          <v-btn icon @click="deleteDocument(index)">
-                                            <v-icon>mdi-delete</v-icon>
+                                          <v-btn size="x-small" variant="outlined" icon @click="deleteDocument(index)">
+                                            <v-icon size="x-large">mdi-delete</v-icon>
                                           </v-btn>
                                         </v-list-item-action>
                                       </template>
@@ -25,7 +26,7 @@
                             </v-card>
                         </v-list>
                     </v-card>
-                    <v-btn v-show="showdocuments" class="my-5">
+                    <v-btn v-show="showtraiterdocuments" class="my-5" @click="traiterDocuments()">
                         Traiter les documents
                     </v-btn>
                 </v-list>
@@ -118,6 +119,7 @@ const counter = ref(0)
 const files = ref([]);
 
 const showdocuments = ref(false);
+const showtraiterdocuments = ref(false);
 
 const documents = ref([
     { type: 'subheader', title: 'Vos documents' }
@@ -417,6 +419,7 @@ function ajouterDocument() {
         console.error(error);
     });
 
+    //files.value = [];
     afficherDocuments();
 }
 
@@ -430,9 +433,15 @@ function deleteDocument(index) {
 function afficherDocuments() {
     if (documents.value.length >= 2) {
         showdocuments.value = true;
+        showtraiterdocuments.value = true
     } else {
         showdocuments.value = false;
+        showtraiterdocuments.value = false
     }
+}
+
+function traiterDocuments() {
+    showtraiterdocuments.value = false;
 }
 
 </script>
