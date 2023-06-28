@@ -4,11 +4,21 @@
             <img src="../assets/logo.png" alt="logo">
             <h1>GiGraph</h1>
         </div>
-        <v-btn>
+        <v-btn @click="connexion">
             Connexion
         </v-btn>
     </header>
 </template>
+
+<script setup>
+import { useRouter } from "vue-router";
+
+const router = useRouter()
+
+function connexion() {
+  router.push({ name: "Login"});
+}
+</script>
 
 <style>
 header {

@@ -2,7 +2,6 @@
     <v-card>
         <v-layout>
             <v-navigation-drawer class="bg-deep-purple pa-2" theme="dark" permanent>
-                <!-- <img class="ma-11 mb-2" src="../assets/logo.png" alt="logo" style="height: 100px"> -->
                 <v-img 
                     class="mx-16"
                     :width="100"
@@ -18,14 +17,11 @@
                     <v-btn class="my-5">
                         Traiter les documents
                     </v-btn>
-                    <!-- <v-card class="mx-auto" max-width="400">
-                        <v-list :items="discussions"></v-list>
-                    </v-card> -->
                 </v-list>
 
                 <template v-slot:append>
                     <div class="pa-2">
-                        <v-btn block>
+                        <v-btn @click="goBack" block>
                             Logout
                         </v-btn>
                     </div>
@@ -89,6 +85,9 @@
   
 <script setup>
 import { reactive, ref, onMounted } from "vue";
+import { useRouter } from "vue-router";
+
+const router = useRouter()
 
 const question = ref("");
 const messages = ref([])
@@ -103,6 +102,9 @@ const discussions = ref([
     { type: 'subheader', title: 'Vos dicussions' }
 ],);
 
+function goBack() {
+  router.push({ name: "Login" });
+}
 
 async function postMessage() {
     if (question.value != "") {
@@ -159,7 +161,7 @@ p {
     max-width: 30em;
     background-color: #fff;
     padding: 1.125em 1.5em;
-    font-size: 1.25em;
+    font-size: 1em;
     border-radius: 1rem;
     box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, .3), 0 0.0625rem 0.125rem rgba(0, 0, 0, .2);
 }
