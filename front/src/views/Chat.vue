@@ -13,9 +13,9 @@
                     <v-list-item prepend-icon="mdi-account-box" title="Bastien Oswald" class="mb-7"></v-list-item>
                     <v-file-input class="white--text" prepend-icon="" v-model="files" label="Ajouter un document" variant="solo-filled" @change="ajouterDocument"></v-file-input>
                     <v-card class="mx-auto" max-width="400">
-                        <v-list :items="documents"></v-list>
+                        <v-list v-show="showdocuments" :items="documents"></v-list>
                     </v-card>
-                    <v-btn class="my-5">
+                    <v-btn v-show="showdocuments" class="my-5">
                             Traiter les documents
                     </v-btn>
                     <!-- <v-card class="mx-auto" max-width="400">
@@ -95,6 +95,8 @@ const messages = ref([])
 const loading = ref(false);
 const files = ref([]);
 
+const showdocuments = ref(false);
+
 const documents = ref([
     { type: 'subheader', title: 'Vos documents' }
 ],);
@@ -102,7 +104,6 @@ const documents = ref([
 const discussions = ref([
     { type: 'subheader', title: 'Vos dicussions' }
 ],);
-
 
 async function postMessage() {
     if(question.value != ""){
@@ -126,6 +127,15 @@ async function postMessage() {
 
 function ajouterDocument() {
     documents.value.push(files.value[files.value.length - 1].name);
+    afficherDocuments();
+}
+
+function afficherDocuments() {
+    if (documents.value.length >= 2) {
+        showdocuments.value = true;
+    } else {
+        showdocuments.value = false;
+    }
 }
 
 </script>
