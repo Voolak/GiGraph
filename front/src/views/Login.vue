@@ -34,9 +34,6 @@
 
 main{
   background-color: #FFE4B5;
-}
-
-.main {
   display: flex;
   align-items: center;
 }
