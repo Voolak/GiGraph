@@ -5,15 +5,32 @@
                 <v-img class="mx-16" :width="100" cover src="../assets/logo.png"></v-img>
                 <v-list color="transparent">
                     <v-list-item prepend-icon="mdi-account-box" title="Bastien Oswald" class="mb-7"></v-list-item>
-                    <v-file-input class="white--text" prepend-icon="" v-model="files" label="Ajouter un document"
-                        variant="solo-filled" @change="ajouterDocument"></v-file-input>
-                    <v-card class="mx-auto" max-width="400">
-                        <v-list v-show="showdocuments" :items="documents"></v-list>
+                    <v-file-input prepend-icon="" v-model="files" label="AJOUTER UN DOCUMENT" variant="solo-filled" multiple accept=".pdf,.csv,.sql" @change="ajouterDocument" class="custom-label"></v-file-input>                    <v-card class="mx-auto" max-width="400">
+                        <v-list v-show="showdocuments">
+                            <v-card v-for="(document, index) in documents" :key="index" class="mx-auto" max-width="400">
+                                <v-list-item>
+                                    <v-list-item-content class="centered-content">
+                                      <v-list-item-title v-if="index === 0">{{ document.title }}</v-list-item-title>
+                                      <template v-else>
+                                        <v-list-item-subtitle>{{ document }}</v-list-item-subtitle>
+                                        <v-list-item-action class="align-right">
+                                          <v-btn icon @click="deleteDocument(index)">
+                                            <v-icon>mdi-delete</v-icon>
+                                          </v-btn>
+                                        </v-list-item-action>
+                                      </template>
+                                    </v-list-item-content>
+                                  </v-list-item>
+                                  
+                            </v-card>
+                        </v-list>
                     </v-card>
                     <v-btn v-show="showdocuments" class="my-5">
                         Traiter les documents
                     </v-btn>
                 </v-list>
+
+                
 
                 <template v-slot:append>
                     <div class="pa-2">
@@ -51,7 +68,7 @@
 
                 <v-form validate-on="submit lazy" @submit.prevent="submit" style="width: ;">
                     <v-row class="ask" align="center" justify="center">
-                        <div class="col">
+                        <!-- <div class="col">
                             <v-select :items="items2" item-value="value" item-text="text"
                                 :menu-props="{ offsetY: true, closeOnContentClick: false }">
                                 <template #selection="{ item }">
@@ -66,14 +83,18 @@
                                     </v-list-item-content>
                                 </template>
                             </v-select>
-                        </div>
+                        </div> -->
                         <!-- <v-textarea class="mx-12" counter label="Posez votre question ici" maxlength="50" single-line
                         v-model="question"></v-textarea> -->
-                        <v-textarea v-model="question" hide-details class="mx-14" variant="filled" auto-grow
-                            label="Posez votre question" rows="2" row-height="20"></v-textarea>
+                        <div class="col chat">
+                        <v-select label="Select" class="select"
+                            :items="['California', 'Colorado', 'Florida', 'Georgia', 'Texas', 'Wyoming']"></v-select>
+                        </div>
+                        <v-textarea v-model="question" hide-details class="mx-14 chat " variant="filled" auto-grow
+                            label="Envoyer un message" rows="2" row-height="20"></v-textarea>
                         <v-col cols="auto">
                             <v-btn type="submit" :disabled="loading" @click="postMessage()" icon="mdi-send" size="x-large"
-                                color="deep-purple"></v-btn>
+                                class="bg-blue"></v-btn>
                         </v-col>
                     </v-row>
                 </v-form>
@@ -381,6 +402,13 @@ function ajouterDocument() {
     afficherDocuments();
 }
 
+function deleteDocument(index) {
+    if (index > 0) {
+        documents.value.splice(index, 1);
+        afficherDocuments();
+    }
+}
+
 function afficherDocuments() {
     if (documents.value.length >= 2) {
         showdocuments.value = true;
@@ -392,6 +420,24 @@ function afficherDocuments() {
 </script>
 
 <style>
+.centered-content {
+    display: flex;
+    align-items: center;
+  } 
+
+.align-right {
+    margin-left: auto;
+  } 
+  
+
+.chat{
+    background-color: rgba(33, 150, 243, 0.1);
+
+}
+.custom-label .v-label {
+    opacity: 1 !important;
+}
+
 .messages {
     padding: 5vh 5vw;
     height: calc(100vh - 125px);
