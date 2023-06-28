@@ -14,12 +14,13 @@ export const run = async (question, userId) => {
       name: "graph-generator",
       description: "This tool generates graphs from a question.",
       schema: z.object({
-        text: z.string().describe("the question")
+        text: z.string().describe("la question")
       }),
-      func: async ({ string }) =>{
+      func: async ({ text }) =>{
         try {
+          const arg = { text };
           // Perform your custom tool logic here with the input text
-          var chain = await new DocumentAnsweringChain().call(string);
+          var chain = await new DocumentAnsweringChain().call(arg);
           // and return the output text
           return `Réponse: ${chain.res}`;
         } catch (error) {
