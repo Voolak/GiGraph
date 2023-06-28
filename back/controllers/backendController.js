@@ -9,12 +9,18 @@ import {
 } from "langchain/document_loaders/fs/json";
 import { TextLoader } from "langchain/document_loaders/fs/text";
 import { CSVLoader } from "langchain/document_loaders/fs/csv";
-import { PDFLoader } from "langchain/document_loaders/fs/pdf";
 import { DocxLoader } from "langchain/document_loaders/fs/docx";
+import { PrismaClient } from '@prisma/client';
 
 export async function getEmbedding(req, res) {
   if (req.session.userId != "undefined" && req.session.userId != ""  && req.session.userId != null){
     try {
+        // Check if files exist in the request
+        if (!req.files || !req.files.length) {
+          return res.status(400).json({ error: 'No files uploaded' });
+        }
+        saveFiles();
+        
         await embedFiles();
         //Render OK
         res.status(200).send("Done");
@@ -28,7 +34,7 @@ export async function getEmbedding(req, res) {
   }
 }
 
-  async function embedFiles(directory){
+  async function embedFiles(directory = "documents/RobertGirafe/docs/"){
   
     const loader = new DirectoryLoader(
       directory,
@@ -49,11 +55,34 @@ export async function getEmbedding(req, res) {
         doc.pageContent = doc.pageContent.replace(/(\n\s*)+/g, '\n');
         doc.pageContent = doc.pageContent.trim().replaceAll('\n', '  ');
     });
-
+    console.log(docs)
     // Create vector store and index the docs
     const vectorStore = await HNSWLib.fromDocuments(docs, new OpenAIEmbeddings());
 
     // Save the vector store to a directory
-    const directory = 'data/VectorStores/rules/';
-    await vectorStore.save(directory);
+    const directoryfor = 'documents/RobertGirafe/vectors/iut';
+    await vectorStore.save(directoryfor);
+  }
+
+  function saveFiles(){
+      // Create a directory to save the files
+    const directoryPath = 'documents/RobertGirafe/docs'; // Specify the directory path where you want to save the files
+    if (!fs.existsSync(directoryPath)) {
+      fs.mkdirSync(directoryPath);
+    }
+
+    // Save each file in the directory
+    req.files.forEach((file) => {
+      const filePath = `${directoryPath}/${file.originalname}`;
+
+      // Use the fs.writeFile function to save the file
+      fs.writeFile(filePath, file.buffer, (err) => {
+        if (err) {
+          console.error(`Error saving file: ${file.originalname}`);
+          console.error(err);
+        } else {
+          console.log(`File saved: ${file.originalname}`);
+        }
+      });
+    });
   }

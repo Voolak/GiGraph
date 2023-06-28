@@ -2,10 +2,16 @@
     <v-card>
         <v-layout>
             <v-navigation-drawer class="bg-deep-purple pa-2" theme="dark" permanent>
-                <img class="ma-11 mb-2" src="../assets/logo.png" alt="logo" style="height: 100px">
+                <!-- <img class="ma-11 mb-2" src="../assets/logo.png" alt="logo" style="height: 100px"> -->
+                <v-img 
+                    class="mx-16"
+                    :width="100"
+                    cover
+                    src="../assets/logo.png"
+                ></v-img>
                 <v-list color="transparent">
                     <v-list-item prepend-icon="mdi-account-box" title="Bastien Oswald" class="mb-7"></v-list-item>
-                    <v-btn class="ajouter" @click="ouvrirGestionnaireFichiers">Ajouter un document</v-btn>
+                    <v-file-input class="white--text" prepend-icon="" v-model="files" label="Ajouter un document" variant="solo-filled" @change="ajouterDocument"></v-file-input>
                     <v-card class="mx-auto" max-width="400">
                         <v-list :items="documents"></v-list>
                     </v-card>
@@ -87,37 +93,14 @@ import { reactive, ref, onMounted } from "vue";
 const question = ref("");
 const messages = ref([])
 const loading = ref(false);
+const files = ref([]);
 
 const documents = ref([
-    { type: 'subheader', title: 'Vos documents' },
-    {
-        title: 'Item #1',
-        value: 1,
-    },
-    {
-        title: 'Item #2',
-        value: 2,
-    },
-    {
-        title: 'Item #3',
-        value: 3,
-    }
+    { type: 'subheader', title: 'Vos documents' }
 ],);
 
 const discussions = ref([
-    { type: 'subheader', title: 'Vos dicussions' },
-    {
-        title: 'Item #4',
-        value: 4,
-    },
-    {
-        title: 'Item #5',
-        value: 5,
-    },
-    {
-        title: 'Item #6',
-        value: 6,
-    },
+    { type: 'subheader', title: 'Vos dicussions' }
 ],);
 
 
@@ -139,6 +122,10 @@ async function postMessage() {
         // chatContainer.scrollTop = chatContainer.scrollHeight
     }
 
+}
+
+function ajouterDocument() {
+    documents.value.push(files.value[files.value.length - 1].name);
 }
 
 </script>
