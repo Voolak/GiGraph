@@ -108,6 +108,7 @@
 <script setup>
 import { reactive, ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
+import axios from 'axios';
 
 const router = useRouter()
 
@@ -152,6 +153,11 @@ async function postMessage() {
 
 function ajouterDocument() {
     documents.value.push(files.value[files.value.length - 1].name);
+    
+    axios.post('/upload-document', {
+        name: files.value[files.value.length - 1].name
+    })
+
     afficherDocuments();
 }
 
