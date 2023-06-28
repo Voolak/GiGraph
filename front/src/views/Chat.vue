@@ -15,18 +15,19 @@
                         <v-list v-show="showdocuments">
                             <v-card v-for="(document, index) in documents" :key="index" class="mx-auto" max-width="400">
                                 <v-list-item>
-                                    <v-list-item-content>
-                                        <v-list-item-title v-if="index === 0">{{ document.title }}</v-list-item-title>
-                                        <template v-else>
-                                            <v-list-item-subtitle>{{ document }}</v-list-item-subtitle>
-                                            <v-list-item-action>
-                                                <v-btn icon @click="deleteDocument(index)">
-                                                    <v-icon>mdi-delete</v-icon>
-                                                </v-btn>
-                                            </v-list-item-action>
-                                        </template>
+                                    <v-list-item-content class="centered-content">
+                                      <v-list-item-title v-if="index === 0">{{ document.title }}</v-list-item-title>
+                                      <template v-else>
+                                        <v-list-item-subtitle>{{ document }}</v-list-item-subtitle>
+                                        <v-list-item-action class="align-right">
+                                          <v-btn icon @click="deleteDocument(index)">
+                                            <v-icon>mdi-delete</v-icon>
+                                          </v-btn>
+                                        </v-list-item-action>
+                                      </template>
                                     </v-list-item-content>
-                                </v-list-item>
+                                  </v-list-item>
+                                  
                             </v-card>
                         </v-list>
                     </v-card>
@@ -173,6 +174,16 @@ function afficherDocuments() {
 </script>
 
 <style>
+.centered-content {
+    display: flex;
+    align-items: center;
+  } 
+
+.align-right {
+    margin-left: auto;
+  } 
+  
+
 .chat{
     background-color: rgba(33, 150, 243, 0.1);
 
