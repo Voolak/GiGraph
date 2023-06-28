@@ -16,51 +16,56 @@ export class DocumentAnsweringChain extends BaseChain {
 
   async _call(inputs) {
 
-    const userId = getUserId();
+    // const userId = getUserId();
 
-    const vectorStore = await getVectorStore();
+    try{
 
-    const model = new OpenAI({
-      temperature: 0,
-      modelName: "gpt-3.5-turbo-16k-0613",
-      verbose: false,
-      openAIApiKey: process.env.OPENAI_API_KEY,
-    });
-    console.log(inputs)
+      const vectorStore = await getVectorStore();
 
-    let sanitizedQuestion = '';
-    for (const key in inputs) {
-      sanitizedQuestion += inputs[key];
+      const model = new OpenAI({
+        temperature: 0,
+        modelName: "gpt-3.5-turbo-16k-0613",
+        verbose: false,
+        openAIApiKey: process.env.OPENAI_API_KEY,
+      });
+      console.log(inputs)
+
+      const sanitizedQuestion = inputs.text;
+
+      const retrievedContext = await vectorStore.similaritySearch(
+        sanitizedQuestion,
+        3
+      );
+  
+      var context = "";
+  
+      retrievedContext.forEach((document) => {
+        context += document["pageContent"];
+      });
+  
+      var QA_PROMPT = `Les informations de contexte sont ci-dessous. 
+        ---------------------
+        ${context}
+        ---------------------
+        Compte tenu des informations contextuelles et non des connaissances préalables, répondez à la question suivante : ${sanitizedQuestion} ?:
+        
+        `;
+  
+      const res = await model.call(QA_PROMPT);
+  
+      return { res };
+
+    }catch(error){
+      console.error(error);
+      return error
     }
 
-    const retrievedContext = await vectorStore.similaritySearch(
-      sanitizedQuestion,
-      5
-    );
-
-    var context = "";
-
-    retrievedContext.forEach((document) => {
-      context += document["pageContent"];
-    });
-
-    var QA_PROMPT = `Les informations de contexte sont ci-dessous. 
-      ---------------------
-      ${context}
-      ---------------------
-      Compte tenu des informations contextuelles et non des connaissances préalables, répondez à la question suivante : ${sanitizedQuestion} ?:
-      
-      `;
-
-    const res = await model.call(QA_PROMPT);
-
-    return { res };
   }
 }
 
 async function getVectorStore() {
   // Load the vector store from the same directory
-  const directory = "data/VectorStores/pdf/";
+  const directory = "documents/RobertGirafe/vectors/iut";
   const loadedVectorStore = await HNSWLib.load(
     directory,
     new OpenAIEmbeddings({

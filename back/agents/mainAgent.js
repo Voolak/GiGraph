@@ -27,6 +27,24 @@ export const run = async (question, userId) => {
           return `Error occurred: ${error.message}`;
         }
       }
+    }),new DynamicStructuredTool({
+      name: "document-answerer",
+      description: "This tool answers a question based on internal documents.",
+      schema: z.object({
+        text: z.string().describe("la question en Français")
+      }),
+      func: async ({ text }) =>{
+        try {
+          const arg = { text };
+          // Perform your custom tool logic here with the input text
+          var chain = await new DocumentAnsweringChain().call(arg);
+          // and return the output text
+          return `Réponse: ${chain.res}`;
+        } catch (error) {
+          // Handle any errors that occur during the processing
+          return `Error occurred: ${error.message}`;
+        }
+      }
     }),
   ];
 
@@ -40,13 +58,9 @@ export const run = async (question, userId) => {
 
   console.log(`Executing with input "${input}"...`);
 
-  const result = await executor.call({ input });
+  const res = await executor.call({ input });
 
-  console.log({ result });
+  console.log({ res });
+  return { res }
 
-  /*
-    {
-      "output": "67.95299776074"
-    }
-  */
 };
