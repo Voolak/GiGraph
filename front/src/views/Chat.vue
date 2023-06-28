@@ -30,7 +30,8 @@
                             </v-card>
                         </v-list>
                     </v-card>
-                    <v-btn v-show="showdocuments" class="my-5">
+                    <v-btn v-show="showdocuments" class="my-5" @click="traiterDocuments">
+                        <v-icon left v-if="showWarningIcon">mdi-alert</v-icon>
                         Traiter les documents
                     </v-btn>
                 </v-list>
@@ -117,6 +118,7 @@ const loading = ref(false);
 const files = ref([]);
 
 const showdocuments = ref(false);
+const showWarningIcon = ref(false);
 
 const documents = ref([
     { type: 'subheader', title: 'Vos documents' }
@@ -165,9 +167,14 @@ function deleteDocument(index) {
 function afficherDocuments() {
     if (documents.value.length >= 2) {
         showdocuments.value = true;
+        showWarningIcon.value = true;
     } else {
         showdocuments.value = false;
     }
+}
+
+function traiterDocuments() {
+    showWarningIcon.value = false;
 }
 
 </script>
