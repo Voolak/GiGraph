@@ -59,7 +59,9 @@ async function goChat() {
 </script>
 
 <style>
-.main {
+
+main{
+  background-color: #FFE4B5;
   display: flex;
   align-items: center;
   background-color: #FFE4B5;
