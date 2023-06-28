@@ -94,7 +94,6 @@ const question = ref("");
 const messages = ref([])
 const loading = ref(false);
 const files = ref([]);
-const prisma = new PrismaClient();
 
 const showdocuments = ref(false);
 
@@ -128,7 +127,6 @@ async function postMessage() {
 
 function ajouterDocument() {
     documents.value.push(files.value[files.value.length - 1].name);
-
     afficherDocuments();
 }
 
