@@ -2,7 +2,6 @@
     <v-card>
         <v-layout>
             <v-navigation-drawer class="bg-deep-purple pa-2" theme="dark" permanent>
-                <!-- <img class="ma-11 mb-2" src="../assets/logo.png" alt="logo" style="height: 100px"> -->
                 <v-img 
                     class="mx-16"
                     :width="100"
@@ -13,19 +12,16 @@
                     <v-list-item prepend-icon="mdi-account-box" title="Bastien Oswald" class="mb-7"></v-list-item>
                     <v-file-input class="white--text" prepend-icon="" v-model="files" label="Ajouter un document" variant="solo-filled" @change="ajouterDocument"></v-file-input>
                     <v-card class="mx-auto" max-width="400">
-                        <v-list :items="documents"></v-list>
+                        <v-list v-show="showdocuments" :items="documents"></v-list>
                     </v-card>
-                    <v-btn class="my-5">
+                    <v-btn v-show="showdocuments" class="my-5">
                             Traiter les documents
                     </v-btn>
-                    <!-- <v-card class="mx-auto" max-width="400">
-                        <v-list :items="discussions"></v-list>
-                    </v-card> -->
                 </v-list>
 
                 <template v-slot:append>
                     <div class="pa-2">
-                        <v-btn block>
+                        <v-btn @click="goBack" block>
                             Logout
                         </v-btn>
                     </div>
@@ -89,11 +85,16 @@
   
 <script setup>
 import { reactive, ref, onMounted } from "vue";
+import { useRouter } from "vue-router";
+
+const router = useRouter()
 
 const question = ref("");
 const messages = ref([])
 const loading = ref(false);
 const files = ref([]);
+
+const showdocuments = ref(false);
 
 const documents = ref([
     { type: 'subheader', title: 'Vos documents' }
@@ -103,29 +104,41 @@ const discussions = ref([
     { type: 'subheader', title: 'Vos dicussions' }
 ],);
 
+function goBack() {
+  router.push({ name: "Login" });
+}
 
 async function postMessage() {
-    if(question.value != ""){
+    if (question.value != "") {
         loading.value = true;
-    messages.value.push({ 'message': question.value, 'type': 0 });
-    messages.value.push({ 'message': "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean consequat nibh eget metus consequat volutpat", 'type': 1, 'loading': true });
+        messages.value.push({ 'message': question.value, 'type': 0 });
+        messages.value.push({ 'message': "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean consequat nibh eget metus consequat volutpat", 'type': 1, 'loading': true });
 
-    question.value = ""
+        question.value = ""
 
-    await new Promise(r => setTimeout(r, 2000));
+        await new Promise(r => setTimeout(r, 2000));
 
-    const lastMessage = messages.value[messages.value.length - 1];
-    lastMessage.loading = false;
-    loading.value = false;
+        const lastMessage = messages.value[messages.value.length - 1];
+        lastMessage.loading = false;
+        loading.value = false;
 
-    // const chatContainer = document.querySelectorAll('.messages')[0];
-    // chatContainer.scrollTop = chatContainer.scrollHeight
+        // const chatContainer = document.querySelectorAll('.messages')[0];
+        // chatContainer.scrollTop = chatContainer.scrollHeight
     }
 
 }
 
 function ajouterDocument() {
     documents.value.push(files.value[files.value.length - 1].name);
+    afficherDocuments();
+}
+
+function afficherDocuments() {
+    if (documents.value.length >= 2) {
+        showdocuments.value = true;
+    } else {
+        showdocuments.value = false;
+    }
 }
 
 </script>
@@ -159,7 +172,7 @@ p {
     max-width: 30em;
     background-color: #fff;
     padding: 1.125em 1.5em;
-    font-size: 1.25em;
+    font-size: 1em;
     border-radius: 1rem;
     box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, .3), 0 0.0625rem 0.125rem rgba(0, 0, 0, .2);
 }

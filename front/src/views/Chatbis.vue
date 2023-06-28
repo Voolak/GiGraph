@@ -1,21 +1,25 @@
 <template>
     <v-card>
         <v-layout>
-            <v-navigation-drawer class="bg-deep-purple pa-2" theme="dark" permanent>
+            <v-navigation-drawer class="bg-blue pa-2" permanent>
                 <img class="ma-11 mb-2" src="../assets/logo.png" alt="logo" style="height: 100px">
                 <v-list color="transparent">
                     <v-list-item prepend-icon="mdi-account-box" title="Romain Bedouret"></v-list-item>  
-                    <div>
-                        <v-file-input prepend-icon="" v-model="files" label="Ajouter un document" variant="solo-filled" @change="ajouterDocument"></v-file-input>
-                        <v-card class="mx-auto">
-                          <v-list :items="items"></v-list>
-                        </v-card>
-                      </div>
+                    <v-file-input prepend-icon="" v-model="files" label="AJOUTER UN DOCUMENT" variant="solo-filled" multiple accept=".pdf,.csv,.sql" @change="ajouterDocument" class="custom-label"></v-file-input>
+                    <v-card class="mx-auto" max-width="400">
+                        <v-list :items="documents"></v-list>
+                    </v-card>
+                    <v-card class="mx-auto">
+                        <v-list :items="items"></v-list>
+                    </v-card>
+                    <v-btn class="my-5">
+                            Traiter les documents
+                    </v-btn>
                 </v-list>
 
                 <template v-slot:append>
                     <div class="pa-2">
-                        <v-btn block>
+                        <v-btn class="btnn" block>
                             Logout
                         </v-btn>
                     </div>
@@ -41,14 +45,14 @@
 
                 </div>
                 <v-row class="ask" align="center" justify="center">
-                    <div class="col">
+                    <div class="col chat">
                         <v-select label="Select" class="select"
                             :items="['California', 'Colorado', 'Florida', 'Georgia', 'Texas', 'Wyoming']"></v-select>
                     </div>
-                    <v-textarea class="mx-12" counter label="Posez votre question ici" maxlength="50" single-line
+                    <v-textarea class="mx-12 chat" counter label="Posez votre question ici" maxlength="50" single-line
                         v-model="question"></v-textarea>
                     <v-col cols="auto">
-                        <v-btn @click="postMessage()" icon="mdi-send" size="x-large" color="deep-purple"></v-btn>
+                        <v-btn @click="postMessage()" icon="mdi-send" size="x-large" class="bg-blue"></v-btn>
                     </v-col>
                 </v-row>
             </v-main>
@@ -72,10 +76,22 @@ function postMessage() {
 function ajouterDocument() {
   items.value.push(files.value[files.value.length - 1].name);
 }
+
+const documents = ref([
+    { type: 'subheader', title: 'Vos documents' }
+],);
 </script>
 
 
 <style>
+.chat{
+    background-color: rgba(33, 150, 243, 0.1);
+
+}
+.custom-label .v-label {
+    opacity: 1 !important;
+}
+
 .messages {
     padding: 2.5vw;
   height:50vh;
