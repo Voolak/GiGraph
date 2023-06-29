@@ -9,7 +9,7 @@ generator client {
 
 datasource db {
     provider = "mysql"
-    url      = "mysql://root:root@localhost:3306/db_gigraph"
+    url      = "mysql://root:@localhost:3306/db_gigraph"
 }
 
 model User {
@@ -20,7 +20,7 @@ model User {
     email      String     @unique
     password   String
     exchanges  Exchange[]
-    groups     Group[]
+    documents  Document[]
 }
 
 model Session {
@@ -28,15 +28,6 @@ model Session {
     sid       String   @unique
     data      String
     expiresAt DateTime
-}
-
-model Exchange {
-    id      Int      @id @default(autoincrement())
-    prompts Prompt[]
-    answers Answer[]
-    graphs  Graph[]
-    user    User     @relation(fields: [userId], references: [id])
-    userId  Int // relation scalar field  (used in the `@relation` attribute above)
 }
 
 model Prompt {
@@ -65,21 +56,40 @@ model Graph {
     created_at DateTime @default(now())
 }
 
-model Group {
-    id         Int        @id @default(autoincrement())
-    name       String
-    user       User       @relation(fields: [userId], references: [id])
-    userId     Int
-    documents  Document[]
-    created_at DateTime   @default(now())
-    directory  String
+model Document {
+    id               Int                @id @default(autoincrement())
+    name             String
+    created_at       DateTime           @default(now())
+    directory        String
+    exchanges        Exchange[]         @relation(name: "ExchangeDocument")
+    User             User?              @relation(fields: [userId], references: [id])
+    userId           Int?
+    ExchangeDocument ExchangeDocument[]
 }
 
-model Document {
-    id         Int      @id @default(autoincrement())
-    name       String
-    group      Group    @relation(fields: [groupId], references: [id])
-    groupId    Int
-    created_at DateTime @default(now())
-    directory  String
+model Exchange {
+    id               Int                @id @default(autoincrement())
+    prompts          Prompt[]
+    answers          Answer[]
+    graphs           Graph[]
+    documents        Document[]         @relation(name: "ExchangeDocument")
+    user             User               @relation(fields: [userId], references: [id])
+    userId           Int
+    ExchangeDocument ExchangeDocument[]
+}
+
+enum ProcessStatus {
+    PROCESSED
+    NOT_PROCESSED
+}
+
+model ExchangeDocument {
+    id         Int           @id @default(autoincrement())
+    exchange   Exchange      @relation(fields: [exchangeId], references: [id])
+    exchangeId Int
+    document   Document      @relation(fields: [documentId], references: [id])
+    documentId Int
+    processed  ProcessStatus @default(NOT_PROCESSED)
+
+    @@map(name: "exchange_document")
 }
