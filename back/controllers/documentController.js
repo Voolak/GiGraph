@@ -22,6 +22,31 @@ export async function getDocuments(req, res) {
   // }
 }
 
+export async function getDocumentsByExchange(req, res) {
+  const exchangeId = req.params.exchangeId;
+  const prisma = new PrismaClient();
+
+  try {
+    const exchangeDocuments = await prisma.exchangeDocument.findMany({
+      where: {
+        exchangeId: parseInt(exchangeId),
+      },
+      include: {
+        document: true,
+      },
+    });
+
+    const documents = exchangeDocuments.map((exchangeDocument) => exchangeDocument.document);
+
+    res.status(200).json(documents);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error processing request');
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+
 export async function getExchange(req, res) {
   const userId = req.session.userId;
   const prisma = new PrismaClient();

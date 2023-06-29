@@ -9,7 +9,7 @@ generator client {
 
 datasource db {
     provider = "mysql"
-    url      = "mysql://root:root@localhost:3306/db_gigraph"
+    url      = "mysql://root:@localhost:3306/db_gigraph"
 }
 
 model User {
