@@ -44,6 +44,7 @@ router.post('/register', async (req, res) => {
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
 
+  console.log(email, password);
   // Perform form validation
   if (!email || !password) {
     return res.status(400).json({ error: 'Email and password are required' });
@@ -51,7 +52,7 @@ router.post('/login', async (req, res) => {
 
   try {
     // Retrieve the user from the database
-    const user = await prisma.user.findUnique({ where: { email } });
+    const user = await prisma.user.findUnique({ where: { email: email } });
 
     if (!user) {
       return res.status(401).json({ error: 'Invalid credentials' });
