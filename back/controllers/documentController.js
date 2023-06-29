@@ -1,20 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 
-export async function uploadDocument(req, res) {
-  //const prisma = new PrismaClient();
-  console.log('victoire', req, req.body);
-  res.status(200);
-    /*try {
-        const data = req.body;
-        console.log(data)
-        console.log(data.name);
-        res.status(200);
-      } catch (error) {
-        console.error(error);
-        res.status(500).send("Error processing request");
-      }*/
-}
-      
+
 export async function getDocuments(req, res) {
   const userId = req.session.userId;
   const prisma = new PrismaClient();
@@ -44,7 +30,7 @@ export async function getDocumentsByExchange(req, res) {
   try {
     const exchangeDocuments = await prisma.exchangeDocument.findMany({
       where: {
-        exchangeId: parseInt(exchangeId),
+        exchangeId: 1,
       },
       include: {
         document: true,
@@ -74,6 +60,9 @@ export async function getExchange(req, res) {
       },
       include: {
         documents: true,
+        prompts: true,
+        answers: true,
+        graphs: true,
       },
     });
 

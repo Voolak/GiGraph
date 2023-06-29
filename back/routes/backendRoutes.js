@@ -2,7 +2,6 @@ import express from 'express';
 import { Router } from 'express';
 import { getEmbedding } from '../controllers/backendController.js';
 import { Agentcall } from '../controllers/agentController.js';
-import { uploadDocument } from '../controllers/documentController.js';
 
 const router = Router();
 
@@ -14,6 +13,6 @@ router.get('/embedding', getEmbedding);
 
 router.post('/agent', Agentcall);
 
-router.post('/uploadDocument', uploadDocument);
+
 
 export default router;
