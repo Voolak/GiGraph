@@ -14,6 +14,6 @@ router.get('/embedding', getEmbedding);
 
 router.post('/agent', Agentcall);
 
-router.post('/upload-document', uploadDocument);
+router.post('/uploadDocument', uploadDocument);
 
 export default router;

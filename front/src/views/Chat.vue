@@ -401,25 +401,27 @@ async function postMessage() {
 
 function ajouterDocument() {
     documents.value.push(files.value[files.value.length - 1].name);
+    console.log(files.value[files.value.length - 1], files);
+    let formData = new FormData();
+    formData.append('file', files.value[files.value.length - 1])
 
-    console.log(files.value[files.value.length - 1]);
-
-    const options = {
-        method: 'POST',
-        url: 'http://127.0.0.1:3306/backend/upload-document',
-        headers: { 'Content-Type': files.value[files.value.length - 1].type },
-        data: {
-            name: files.value[files.value.length - 1].name
-        }
-    };
-
-    axios.request(options).then(function (response) {
-        console.log(response.data.res)
-    }).catch(function (error) {
+    axios.post('http://127.0.0.1:3000/backend/uploadDocument', 
+    formData, 
+    {
+      headers: { 
+          'Content-Type': 'multipart/form-data', 
+          'Content-Size': files.value[files.value.length - 1].size
+      }
+    })
+      .then(function (response) {
+        console.log(response);
+        console.log(response.data.res);
+        console.log('success');
+      }).catch(function (error) {
         console.error(error);
-    });
+      });
 
-    //files.value = [];
+    files.value = [];
     afficherDocuments();
 }
 

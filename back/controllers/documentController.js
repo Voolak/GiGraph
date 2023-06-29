@@ -1,9 +1,9 @@
 import { PrismaClient } from '@prisma/client';
 
 export async function uploadDocument(req, res) {
-  const prisma = new PrismaClient();
-    console.log('victoire', req);
-    res.status(200);
+  //const prisma = new PrismaClient();
+  console.log('victoire', req, req.body);
+  res.status(200);
     /*try {
         const data = req.body;
         console.log(data)
