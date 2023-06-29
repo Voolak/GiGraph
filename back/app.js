@@ -3,6 +3,7 @@ import express, { static as expressStatic } from 'express';
 import helmet from 'helmet';
 import backendRoutes from './routes/backendRoutes.js';
 import authRoutes from './routes/authRoutes.js';
+import documentRoutes from './routes/documentRoutes.js';
 import expressSession from 'express-session';
 import { PrismaClient } from '@prisma/client';
 import { PrismaSessionStore } from '@quixo3/prisma-session-store';
@@ -36,6 +37,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/auth', authRoutes); // Add this line for authentication routes
 app.use('/backend', backendRoutes);
+app.use('/document', documentRoutes);
 
 app.listen(3000, () => {
   console.log('Server started on port 3000');
