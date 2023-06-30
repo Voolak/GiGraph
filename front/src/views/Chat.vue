@@ -405,12 +405,15 @@ function ajouterDocument() {
     let formData = new FormData();
     formData.append('file', files.value[files.value.length - 1])
 
-    axios.post('http://127.0.0.1:3000/backend/uploadDocument', 
+    axios.post('http://127.0.0.1:3000/document/uploadDocument', 
     formData, 
     {
       headers: { 
           'Content-Type': 'multipart/form-data', 
-          'Content-Size': files.value[files.value.length - 1].size
+          'Content-Size': files.value[files.value.length - 1].size,
+          'Access-Control-Allow-Origin': 'http://127.0.0.1:3000',
+          'Access-Control-Allow-Methods': 'POST',
+          'Access-Control-Allow-Headers': ['Content-Type', 'Content-Size']
       }
     })
       .then(function (response) {
