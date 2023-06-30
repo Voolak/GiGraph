@@ -15,12 +15,8 @@ import { PrismaClient } from '@prisma/client';
 export async function getEmbedding(req, res) {
   if (req.session.userId != "undefined" && req.session.userId != ""  && req.session.userId != null){
     try {
-        // Check if files exist in the request
-        if (!req.files || !req.files.length) {
-          return res.status(400).json({ error: 'No files uploaded' });
-        }
-        saveFiles();
-        
+
+      
         await embedFiles();
         //Render OK
         res.status(200).send("Done");
