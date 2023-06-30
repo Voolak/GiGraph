@@ -103,7 +103,7 @@
             </v-btn>
           </div>
         </template>
-      </v-navigation-drawer>
+        
       <v-main style="height: 100vh; background-color: white">
         <div class="messages">
           <div v-for="message in messages" class="mb-12">
