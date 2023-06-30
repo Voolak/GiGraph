@@ -1,7 +1,7 @@
 <template>
     <v-card>
         <v-layout>
-            <v-navigation-drawer class="bg-blue pa-2 pt-10" permanent>
+            <v-navigation-drawer class="bg-deep-purple pa-2 pt-10" theme="dark" permanent>
                 <v-img class="mx-16" :width="100" cover src="../assets/logo.png"></v-img>
                 <v-list color="transparent">
                     <v-list-item prepend-icon="mdi-account-box" title="Bastien Oswald" class="mb-7"></v-list-item>
@@ -9,19 +9,20 @@
                     <v-card class="mx-auto" max-width="400">
                         <v-list v-show="showdocuments">
                             <v-card v-for="(document, index) in documents" :key="index" class="mx-auto" max-width="400">
-                              <v-list-item>
-                                  <v-list-item-content class="centered-content">
-                                    <v-list-item-title v-if="index === 0">{{ document.title }}</v-list-item-title>
-                                    <template v-else>
-                                      <v-list-item-subtitle>{{ document }}</v-list-item-subtitle>
-                                      <v-list-item-action class="align-right">
-                                        <v-btn size="x-small" variant="outlined" icon @click="deleteDocument(index)">
-                                          <v-icon size="x-large">mdi-delete</v-icon>
-                                        </v-btn>
-                                      </v-list-item-action>
-                                    </template>
-                                  </v-list-item-content>
-                                </v-list-item>
+                                <v-list-item>
+                                    <v-list-item-content class="centered-content">
+                                      <v-list-item-title v-if="index === 0">{{ document.title }}</v-list-item-title>
+                                      <template v-else>
+                                        <v-list-item-subtitle>{{ document }}</v-list-item-subtitle>
+                                        <v-list-item-action class="align-right">
+                                          <v-btn size="x-small" variant="outlined" icon @click="deleteDocument(index)">
+                                            <v-icon size="x-large">mdi-delete</v-icon>
+                                          </v-btn>
+                                        </v-list-item-action>
+                                      </template>
+                                    </v-list-item-content>
+                                  </v-list-item>
+                                  
                             </v-card>
                         </v-list>
                     </v-card>
@@ -30,42 +31,8 @@
                     </v-btn>
                 </v-list>
 
-                <div style="height: 50px;"></div>
+                
 
-                  <v-card class="mx-auto" max-width="400">
-                    <v-list>
-                      <v-card>
-                        <v-list-item>
-                          <v-list-item-content class="centered-content">
-                            <v-list-item-title>VOTRE HISTORIQUE</v-list-item-title>
-                          </v-list-item-content>
-                        </v-list-item>
-                      </v-card>
-                      <v-card v-for="(conversation, index) in historique" :key="index">
-                        <v-list-item>
-                          <v-list-item-content class="centered-content">
-                            <div class="conversation-details">
-                              <a href="" class="custom-link">
-                                {{ conversation.title }}
-                              </a>
-                              <v-list-item-subtitle class="align-right">{{ conversation.date }}</v-list-item-subtitle>
-                            </div>
-                            <v-btn size="x-small" variant="outlined" class="align-right" icon @click="supprimerConversation(index)">
-                              <v-icon size="x-large">mdi-delete</v-icon>
-                            </v-btn>
-                          </v-list-item-content>
-                        </v-list-item>
-                        <hr class="divider" />
-                      </v-card>
-                      <v-card>
-                        <v-list-item>
-                          <v-list-item-content class="centered-content">
-                            <v-btn size="small" variant="contained" color="primary" @click="ajouterConversation">Ajouter</v-btn>
-                          </v-list-item-content>
-                        </v-list-item>
-                      </v-card>
-                    </v-list>
-                  </v-card>
                 <template v-slot:append>
                     <div class="pa-2">
                         <v-btn @click="goBack" block>
@@ -183,8 +150,6 @@ const files = ref([]);
 const showdocuments = ref(false);
 const showtraiterdocuments = ref(false);
 
-const showhistorique = ref(false);
-
 const documents = ref([
   { type: 'subheader', title: 'Vos documents' }
 ],);
@@ -192,24 +157,6 @@ const documents = ref([
 const discussions = ref([
   { type: 'subheader', title: 'Vos dicussions' }
 ],);
-
-function ajouterConversation() {
-  const nouvelleConversation = {
-    title: 'Nouvelle Conversation',
-    date: '29-06'
-  };
-  historique.push(nouvelleConversation);
-}
-
-const historique = [
-  { title: 'Conversation 1', date: '29-06' },
-  { title: 'Conversation 2', date: '28-06' },
-  { title: 'Conversation 3', date: '27-06' }
-];
-
-function supprimerConversation(index) {
-  historique.splice(index, 1);
-}
 
 function goBack() {
   router.push({ name: "Login" });
@@ -527,24 +474,10 @@ function afficherDocuments() {
 function traiterDocuments() {
   showtraiterdocuments.value = false;
 }
+
 </script>
 
 <style>
-.custom-link {
-  text-decoration: none;
-  color: inherit;
-  cursor: pointer;
-}
-
-.custom-link:hover {
-  color: #2196F3;
-}
-
-.divider {
-  border: none;
-  border-top: 1px solid black;
-}
-
 .centered-content {
   display: flex;
   align-items: center;

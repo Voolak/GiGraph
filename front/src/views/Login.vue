@@ -61,9 +61,10 @@ async function goChat() {
 <style>
 
 main{
-  background-color: rgba(33, 150, 243, 0.3);
+  background-color: #FFE4B5;
   display: flex;
   align-items: center;
+  background-color: #FFE4B5;
 }
 
 .login-title {
