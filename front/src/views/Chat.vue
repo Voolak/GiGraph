@@ -64,10 +64,9 @@
 
             </v-row>
           </div>
-
         </div>
 
-        <v-form validate-on="submit lazy" @submit.prevent="submit" style="width: ;">
+        <v-form v-if="showchatdocuments" validate-on="submit lazy" @submit.prevent="submit" style="width: ;">
           <v-row class="ask" align="center" justify="center">
             <!-- <div class="col">
                             <v-select :items="items2" item-value="value" item-text="text"
@@ -99,6 +98,7 @@
             </v-col>
           </v-row>
         </v-form>
+        <p v-else>Veuillez ajouter des documents</p>
       </v-main>
     </v-layout>
   </v-card>
@@ -120,6 +120,7 @@ const files = ref([]);
 
 const showdocuments = ref(false);
 const showtraiterdocuments = ref(false);
+const showchatdocuments = ref(false)
 
 const documents = ref([
   { type: 'subheader', title: 'Vos documents' }
@@ -436,9 +437,11 @@ function afficherDocuments() {
   if (documents.value.length >= 2) {
     showdocuments.value = true;
     showtraiterdocuments.value = true
+    showchatdocuments.value = true
   } else {
     showdocuments.value = false;
     showtraiterdocuments.value = false
+    showchatdocuments.value = false
   }
 }
 
