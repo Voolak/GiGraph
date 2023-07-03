@@ -49,7 +49,7 @@
                                     style="height: 30px"></b-col>
                             <b-col>
                                 <p v-show="message.loading == false">
-                                <div :id="'graph' + (message.id).toString()" style="width: 800px;height:400px;"></div>
+                                  <div :id="'graph' + (message.id).toString()" style="width: 800px;height:400px;"></div>
                                 </p>
                                 <p v-show="message.loading == true"><v-progress-circular color="primary"
                                         indeterminate></v-progress-circular></p>
@@ -62,39 +62,10 @@
                             <b-col><v-icon size="x-large" color="green-darken-2" icon="mdi-account-box"
                                     class="mx-8"></v-icon></b-col>
 
+                        </v-row>
+                    </div>
 
-        <template v-slot:append>
-          <div class="pa-2">
-            <v-btn @click="goBack" block>
-              Déconnexion
-            </v-btn>
-          </div>
-        </template>
-        
-      <v-main style="height: 100vh; background-color: white">
-        <div class="messages">
-          <div v-for="message in messages" class="mb-12">
-            <v-row v-if="message.type == 1">
-              <b-col class="text-right"><img class="mx-5 mb-2" src="../assets/logo.png" alt="logo"
-                  style="height: 30px"></b-col>
-              <b-col>
-                <p v-show="message.loading == false">
-                <div :id="'graph' + (message.id).toString()" style="width: 800px;height:400px;"></div>
-                </p>
-                <p v-show="message.loading == true"><v-progress-circular color="primary"
-                    indeterminate></v-progress-circular></p>
-              </b-col>
-            </v-row>
-            <v-row v-if="message.type == 0" style="justify-content: end;">
-              <b-col class="text-right">
-                <p>{{ message.message }}</p>
-              </b-col>
-              <b-col><v-icon size="x-large" color="green-darken-2" icon="mdi-account-box" class="mx-8"></v-icon></b-col>
-
-            </v-row>
-          </div>
-
-        </div>
+                </div>
 
         <v-form validate-on="submit lazy" @submit.prevent="submit" style="width: ;">
           <v-row class="ask" align="center" justify="center">
