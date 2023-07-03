@@ -31,43 +31,39 @@
                     </v-btn>
                 </v-list>
 
-                
+        <template v-slot:append>
+          <div class="pa-2">
+            <v-btn @click="goBack" block>
+              Déconnexion
+            </v-btn>
+          </div>
+        </template>
+      </v-navigation-drawer>
+      <v-main style="height: 100vh; background-color: white">
+        <div class="messages">
+          <div v-for="message in messages" class="mb-12">
+            <v-row v-if="message.type == 1">
+              <b-col class="text-right"><img class="mx-5 mb-2" src="../assets/logo.png" alt="logo"
+                  style="height: 30px"></b-col>
+              <b-col>
+                <p v-show="message.loading == false">
+                <div :id="'graph' + (message.id).toString()" style="width: 800px;height:400px;"></div>
+                </p>
+                <p v-show="message.loading == true"><v-progress-circular color="primary"
+                    indeterminate></v-progress-circular></p>
+              </b-col>
+            </v-row>
+            <v-row v-if="message.type == 0" style="justify-content: end;">
+              <b-col class="text-right">
+                <p>{{ message.message }}</p>
+              </b-col>
+              <b-col><v-icon size="x-large" color="green-darken-2" icon="mdi-account-box" class="mx-8"></v-icon></b-col>
 
-                <template v-slot:append>
-                    <div class="pa-2">
-                        <v-btn @click="goBack" block>
-                            Déconnexion
-                        </v-btn>
-                    </div>
-                </template>
-            </v-navigation-drawer>
-            <v-main style="height: 100vh; background-color: white">
-                <div class="messages">
-                    <div v-for="message in messages" class="mb-12">
-                        <v-row v-if="message.type == 1">
-                            <b-col class="text-right"><img class="mx-5 mb-2" src="../assets/logo.png" alt="logo"
-                                    style="height: 30px"></b-col>
-                            <b-col>
-                                <p v-show="message.loading == false">
-                                  <div :id="'graph' + (message.id).toString()" style="width: 800px;height:400px;"></div>
-                                </p>
-                                <p v-show="message.loading == true"><v-progress-circular color="primary"
-                                        indeterminate></v-progress-circular></p>
-                            </b-col>
-                        </v-row>
-                        <v-row v-if="message.type == 0" style="justify-content: end;">
-                            <b-col class="text-right">
-                                <p>{{ message.message }}</p>
-                            </b-col>
-                            <b-col><v-icon size="x-large" color="green-darken-2" icon="mdi-account-box"
-                                    class="mx-8"></v-icon></b-col>
+            </v-row>
+          </div>
+        </div>
 
-                        </v-row>
-                    </div>
-
-                </div>
-
-        <v-form validate-on="submit lazy" @submit.prevent="submit" style="width: ;">
+        <v-form v-if="showchatdocuments" validate-on="submit lazy" @submit.prevent="submit" style="width: ;">
           <v-row class="ask" align="center" justify="center">
             <!-- <div class="col">
                             <v-select :items="items2" item-value="value" item-text="text"
@@ -99,6 +95,7 @@
             </v-col>
           </v-row>
         </v-form>
+        <p v-else>Veuillez ajouter des documents</p>
       </v-main>
     </v-layout>
   </v-card>
@@ -120,6 +117,7 @@ const files = ref([]);
 
 const showdocuments = ref(false);
 const showtraiterdocuments = ref(false);
+const showchatdocuments = ref(false)
 
 const documents = ref([
   { type: 'subheader', title: 'Vos documents' }
@@ -436,9 +434,11 @@ function afficherDocuments() {
   if (documents.value.length >= 2) {
     showdocuments.value = true;
     showtraiterdocuments.value = true
+    showchatdocuments.value = true
   } else {
     showdocuments.value = false;
     showtraiterdocuments.value = false
+    showchatdocuments.value = false
   }
 }
 
