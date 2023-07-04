@@ -1,6 +1,6 @@
 import express from 'express';
 import { Router } from 'express';
-import { uploadDocument, getDocuments, getExchange, getDocumentsByExchange } from '../controllers/documentController.js';
+import { getDocuments, getExchange, getDocumentsByExchange } from '../controllers/documentController.js';
 import multer from 'multer';
 import fs from 'fs';
 import { PrismaClient } from '@prisma/client';
@@ -21,7 +21,6 @@ router.get('/get', getDocumentsByExchange);
 
 router.get('/exchanges/:exchangeId/documents', getDocumentsByExchange);
 
-
 router.post('/uploadDocument', upload.single('file'), async (req, res) => {
     try {
       const file = req.file; // Access the uploaded file through req.file
@@ -29,8 +28,6 @@ router.post('/uploadDocument', upload.single('file'), async (req, res) => {
       // Call saveFiles() function with the file
       await saveFiles(file);
     
-     
-  
       res.json({ message: 'Document created successfully' });
     } catch (error) {
       console.error('Error creating document:', error);

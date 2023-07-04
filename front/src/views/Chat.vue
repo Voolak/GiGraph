@@ -444,6 +444,24 @@ function afficherDocuments() {
 
 function traiterDocuments() {
   showtraiterdocuments.value = false;
+
+  console.log(documents.value);
+
+  axios
+    .get('http://127.0.0.1:3000/backend/embedding', { 
+      params: {
+        documents: documents.value,
+        userId: 1,
+      }
+    }).then(response => {
+      console.log(response);
+      console.log(response.data);
+      console.log('success');
+      let documents = response.data;
+    }).catch(error => {
+      console.error(error);
+    });
+  
 }
 
 </script>
