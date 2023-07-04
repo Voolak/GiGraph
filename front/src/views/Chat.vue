@@ -1,7 +1,7 @@
 <template>
   <v-card>
     <v-layout>
-      <v-navigation-drawer class="bg-deep-purple pa-2 pt-10" theme="dark" permanent>
+      <v-navigation-drawer class="bg-blue pa-2 pt-10" theme="" permanent>
         <v-img class="mx-16" :width="100" cover src="../assets/logo.png"></v-img>
         <v-list color="transparent">
           <v-list-item prepend-icon="mdi-account-box" title="Bastien Oswald" class="mb-7"></v-list-item>
@@ -42,7 +42,7 @@
           </div>
         </template>
       </v-navigation-drawer>
-      <v-main style="height: 100vh; background-color: white">
+      <v-main style="height: 100vh">
         <div class="messages">
           <div v-show="showdocuments" v-for="message in messages" class="mb-12">
             <v-row v-if="message.type == 1">
@@ -50,7 +50,10 @@
                   style="height: 30px"></b-col>
               <b-col>
                 <p v-show="message.loading == false">
-                <div :id="'graph' + (message.id).toString()" style="width: 800px;height:400px;"></div>
+                <div v-if="message.isMessage == true">{{ message.message }}</div>
+                <div v-else :id="'graph' + (message.id).toString()" style="width: 800px;height:400px;">
+                </div>
+
                 </p>
                 <p v-show="message.loading == true"><v-progress-circular color="primary"
                     indeterminate></v-progress-circular></p>
@@ -65,7 +68,8 @@
             </v-row>
           </div>
           <div v-show="!showdocuments"
-            style="font-size: 20px; align-items: center; display: flex; justify-content: center; margin-top: 40vh">Veuillez
+            style="font-size: 20px; align-items: center; display: flex; justify-content: center; margin-top: 40vh">
+            Veuillez
             ajouter des documents avant de poser une question</div>
         </div>
 
@@ -119,27 +123,7 @@ const messages = ref([])
 const loading = ref(false);
 const counter = ref(0)
 const files = ref([]);
-const datas = ref({
-  title: 'Je suis un graph',
-  subtitle: 'sous-graph',
-  datas: [{ value: 1048, name: 'Search Engine' },
-  { value: 735, name: 'Direct' },
-  { value: 580, name: 'Email' },
-  { value: 484, name: 'Union Ads' },
-  { value: 300, name: 'Video Ads' }]
-})
 
-const bar = ref({
-  title: 'je suis un bar chart',
-  columnsName: ['Shirts', 'Cardigans', 'Chiffons', 'Pants', 'Heels', 'Socks'],
-  values: [5, 20, 36, 10, 10, 20],
-  name: 'sales'
-})
-
-const line = ref({
-  values: [820, 932, 901, 934, 1290, 1330, 1320],
-  columnsName: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-})
 
 const showdocuments = ref(false);
 const showtraiterdocuments = ref(false);
@@ -159,94 +143,128 @@ function goBack() {
 async function postMessage() {
   if (question.value != "") {
     var id = counter.value
-    loading.value = true;
     messages.value.push({ 'message': question.value, 'type': 0 });
-    messages.value.push({ 'type': 1, 'loading': true, 'id': id });
+    messages.value.push({ "id": id, 'type': 1, 'loading': true });
+    loading.value = true;
     counter.value++
-    question.value = ""
+    const options = {
+      method: 'POST',
+      url: 'http://127.0.0.1:3000/backend/agent',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      data: {
+        prompt: question.value
+      }
+    };
 
-    await new Promise(r => setTimeout(r, 2000));
+    axios.request(options).then(function (response) {
+      const graph = response.data.response;
+      console.log(graph)
+      const lastMessage = messages.value[messages.value.length - 1];
+      lastMessage.loading = false;
+      loading.value = false;
+      question.value = ""
+      var myChart;
+      var option;
+      console.log('graph' + (counter.value - 1).toString())
+      if (graph.type) {
+        myChart = echarts.init(document.getElementById('graph' + (counter.value - 1).toString()));
+      }
 
-    const lastMessage = messages.value[messages.value.length - 1];
-    lastMessage.loading = false;
-    loading.value = false;
-    console.log('graph' + (counter.value - 1).toString())
-    var myChart = echarts.init(document.getElementById('graph' + (counter.value - 1).toString()));
-    var option;
-    if (counter.value == 1) {
-      option = {
-        title: {
-          text: bar.value.title
-        },
-        tooltip: {},
-        legend: {
-          data: [bar.value.name]
-        },
-        xAxis: {
-          data: bar.value.columnsName
-        },
-        yAxis: {},
-        series: [
-          {
-            name: 'sales',
-            type: 'bar',
-            data: bar.value.values
-          }
-        ]
-      };
-    } if (counter.value == 2) {
-      option = {
-        title: {
-          text: datas.value.title,
-          subtext: datas.value.subtitle,
-          left: 'center'
-        },
-        tooltip: {
-          trigger: 'item'
-        },
-        legend: {
-          orient: 'vertical',
-          left: 'left'
-        },
-        series: [
-          {
-            name: 'Access From',
-            type: 'pie',
-            radius: '50%',
-            data:
-              datas.value.datas
-            ,
-            emphasis: {
-              itemStyle: {
-                shadowBlur: 10,
-                shadowOffsetX: 0,
-                shadowColor: 'rgba(0, 0, 0, 0.5)'
+      console.log("Graph type :" + graph.type)
+      switch (graph.type) {
+        case 'bar': option = {
+          title: {
+            text: graph.title
+          },
+          tooltip: {},
+          legend: {
+            data: [graph.name]
+          },
+          xAxis: {
+            data: graph.columnsName
+          },
+          yAxis: {},
+          series: [
+            {
+              name: 'sales',
+              type: 'bar',
+              data: graph.values
+            }
+          ]
+        };
+          // Display the chart using the configuration items and data just specified.
+          myChart.setOption(option);
+          break;
+        case 'pie': option = {
+          title: {
+            text: graph.title,
+            subtext: graph.subtitle,
+            left: 'center'
+          },
+          tooltip: {
+            trigger: 'item'
+          },
+          legend: {
+            orient: 'vertical',
+            left: 'left'
+          },
+          series: [
+            {
+              name: 'Access From',
+              type: 'pie',
+              radius: '50%',
+              data:
+                graph.datas
+              ,
+              emphasis: {
+                itemStyle: {
+                  shadowBlur: 10,
+                  shadowOffsetX: 0,
+                  shadowColor: 'rgba(0, 0, 0, 0.5)'
+                }
               }
             }
-          }
-        ]
+          ]
+        };
+          // Display the chart using the configuration items and data just specified.
+          myChart.setOption(option);
+          break;
+        case 'line': option = {
+          xAxis: {
+            type: 'category',
+            boundaryGap: false,
+            data: graph.columnsName
+          },
+          yAxis: {
+            type: 'value'
+          },
+          series: [
+            {
+              data: graph.values,
+              type: 'line',
+              areaStyle: {}
+            }
+          ]
+        };
+          // Display the chart using the configuration items and data just specified.
+          myChart.setOption(option);
+          break;
+        default:
+          console.log(response)
+          question.value = ""
+          messages.value.pop()
+          messages.value.push({ 'message': response.data.response, 'type': 1, 'loading': false, "isMessage": true });
+
+          const lastMessage = messages.value[messages.value.length - 1];
       };
-    } if (counter.value == 2) {
-      option = {
-        xAxis: {
-          type: 'category',
-          boundaryGap: false,
-          data: line.value.columnsName
-        },
-        yAxis: {
-          type: 'value'
-        },
-        series: [
-          {
-            data: line.value.values,
-            type: 'line',
-            areaStyle: {}
-          }
-        ]
-      };
-    }
-    // Display the chart using the configuration items and data just specified.
-    myChart.setOption(option);
+
+    }).catch(function (error) {
+      console.error(error);
+    });
+
+
+    // const chatContainer = document.querySelectorAll('.messages')[0];
+    // chatContainer.scrollTop = chatContainer.scrollHeight
   }
 
 }

@@ -8,7 +8,7 @@ export async function getDocuments(req, res) {
     try {
       const documents = await prisma.document.findMany({
         where: {
-            userId: 1,
+            userId: userId,
             // userId: parseInt(userId),
         },
       });
