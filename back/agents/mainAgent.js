@@ -56,7 +56,7 @@ export const run = async (question, userId) => {
     }),
     new DynamicStructuredTool({
       name: "graph-generator-from-context",
-      description: "This tool generates graphs based on context given by the tool `document-answerer`.",
+      description: "You must call the document-answerer tool beforehand to use this tool. This tool generates graphs based on context given by the tool `document-answerer`. It can not be called before ",
       schema: z.object({
         text: z.string().describe("the users question"),
         type: z.string().describe("graph type"),
@@ -64,6 +64,9 @@ export const run = async (question, userId) => {
       }),
       func: async ({ text, type, data }) =>{
         try {
+          if(data == ""){
+            return "You must call the document-answerer tool beforehand to use this tool."
+          }
           const arg = { text, type, data };
           console.log("GRAPH CALLED:");
           // Perform your custom tool logic here with the input text
@@ -81,11 +84,11 @@ export const run = async (question, userId) => {
 
   const executor = await initializeAgentExecutorWithOptions(tools, model, {
     agentType: "structured-chat-zero-shot-react-description",
-    verbose: false,
+    verbose: true,
   });
   console.log("Loaded agent.");
 
-  const input = question;
+  const input = "Question :' "+question+" . '. If the user wants a graph, first fetch the informations to display in the document-answerer tool and then only, call the graph-generator tool.";
 
   console.log(`Executing with input "${input}"...`);
 

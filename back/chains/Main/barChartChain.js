@@ -44,13 +44,13 @@ export class BarChartChain extends BaseChain {
         name : 'sales'
       }
        Ecris les données qui vont avec un graph Echarts de type bar-chart en mettant en valeur toutes ces informations : ${data}
-       Suis le même schéma, value est forcément un int :
+       Suis le même schéma :
        {
         title: 'je suis un bar chart',
         type: 'bar', 
-        columnsName : ['', '', '', '', '', ''],
-        values: [,,,,],
-        name : 'Name'
+        columnsName : ['string', 'string', 'string', 'string', 'string', 'string'],
+        values: [int,int,int,int,int],
+        name : 'sales'
       }
 
       Ne renvoie qu'un json, pas de texte:
@@ -68,7 +68,7 @@ export class BarChartChain extends BaseChain {
           },
         });
     
-        console.log('New graph created');
+        console.log('New graph created:');
       } catch (error) {
         console.error('Error creating graph:', error);
       }

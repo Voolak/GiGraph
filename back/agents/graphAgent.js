@@ -82,7 +82,7 @@ export const runGraphAgent = async (question, userId) => {
 
   const executor = await initializeAgentExecutorWithOptions(tools, model, {
     agentType: "structured-chat-zero-shot-react-description",
-    verbose: false,
+    verbose: true,
   });
 
   const input = question;
