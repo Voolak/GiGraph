@@ -23,7 +23,8 @@
                 </v-form>
               </v-card-text>
             </v-card>
-            <v-alert v-if="alert" class="mt-6" density="compact" type="warning" title="Identifiant ou mot de passe incorrect"
+            <v-alert v-if="alert" class="mt-6" density="compact" type="warning"
+              title="Identifiant ou mot de passe incorrect"
               text="Veuillez vérifier vos informations de connexions"></v-alert>
           </v-col>
         </v-row>
@@ -35,6 +36,7 @@
 <script setup>
 import { ref } from "vue";
 import { useRouter } from "vue-router";
+import axios from 'axios';
 
 const email = ref('')
 const password = ref('')
@@ -43,24 +45,37 @@ const alert = ref(false)
 const router = useRouter()
 
 async function goChat() {
-  if (email.value == "root" && password.value == "root") {
+  const options = {
+    method: 'POST',
+    url: 'http://127.0.0.1:3000/auth/login',
+    headers: {
+      cookie: 'connect.sid=s%253AhX8dQcHMbpo3ngx8QbkCi2mBhz-VxToN.8fvPraHK4PaSOkeQUNX9xi34cnqqwhBIpwn2314wX%252BM',
+      'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    data: { email: email.value, password: password.value }
+  };
+
+  axios.request(options).then(function (response) {
+    if (response.status == 200) {
+      loading.value = true
+      router.push({ name: "Chat" });
+    } else {
+      loading.value = true
+      alert.value = true
+      loading.value = false
+    }
+  }).catch(function (error) {
+    console.error(error);
     loading.value = true
-    await new Promise(r => setTimeout(r, 2000));
-    router.push({ name: "Chat" });
-  }
-  else {
-    loading.value = true
-    await new Promise(r => setTimeout(r, 1000));
     alert.value = true
     loading.value = false
-  }
+  });
 }
 
 </script>
 
 <style>
-
-main{
+main {
   background-color: #FFE4B5;
   display: flex;
   align-items: center;

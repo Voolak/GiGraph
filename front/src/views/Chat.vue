@@ -39,15 +39,18 @@
           </div>
         </template>
       </v-navigation-drawer>
-      <v-main style="height: 100vh; background-color: white">
+      <v-main style="height: 100vh">
         <div class="messages">
-          <div v-for="message in messages" class="mb-12">
+          <div v-show="showdocuments" v-for="message in messages" class="mb-12">
             <v-row v-if="message.type == 1">
               <b-col class="text-right"><img class="mx-5 mb-2" src="../assets/logo.png" alt="logo"
                   style="height: 30px"></b-col>
               <b-col>
                 <p v-show="message.loading == false">
-                <div :id="'graph' + (message.id).toString()" style="width: 800px;height:400px;"></div>
+                <div v-if="message.isMessage == true">{{ message.message }}</div>
+                <div v-else :id="'graph' + (message.id).toString()" style="width: 800px;height:400px;">
+                </div>
+
                 </p>
                 <p v-show="message.loading == true"><v-progress-circular color="primary"
                     indeterminate></v-progress-circular></p>
@@ -61,9 +64,13 @@
 
             </v-row>
           </div>
+          <div v-show="!showdocuments"
+            style="font-size: 20px; align-items: center; display: flex; justify-content: center; margin-top: 40vh">
+            Veuillez
+            ajouter des documents avant de poser une question</div>
         </div>
 
-        <v-form v-if="showchatdocuments" validate-on="submit lazy" @submit.prevent="submit" style="width: ;">
+        <v-form v-if="showdocuments" validate-on="submit lazy" @submit.prevent="submit" style="width: ;">
           <v-row class="ask" align="center" justify="center">
             <!-- <div class="col">
                             <v-select :items="items2" item-value="value" item-text="text"
@@ -83,10 +90,10 @@
                         </div> -->
             <!-- <v-textarea class="mx-12" counter label="Posez votre question ici" maxlength="50" single-line
                         v-model="question"></v-textarea> -->
-            <div class="col chat">
-              <v-select label="Select" class="select"
+            <!-- <div class="col chat">
+              <v-select label="Select" class="select" hide-details hide-no-data
                 :items="['California', 'Colorado', 'Florida', 'Georgia', 'Texas', 'Wyoming']"></v-select>
-            </div>
+            </div> -->
             <v-textarea v-model="question" hide-details class="mx-14 chat " variant="filled" auto-grow
               label="Envoyer un message" rows="2" row-height="20"></v-textarea>
             <v-col cols="auto">
@@ -95,7 +102,6 @@
             </v-col>
           </v-row>
         </v-form>
-        <p v-else>Veuillez ajouter des documents</p>
       </v-main>
     </v-layout>
   </v-card>
@@ -115,9 +121,9 @@ const loading = ref(false);
 const counter = ref(0)
 const files = ref([]);
 
+
 const showdocuments = ref(false);
 const showtraiterdocuments = ref(false);
-const showchatdocuments = ref(false)
 
 const documents = ref([
   { type: 'subheader', title: 'Vos documents' }
@@ -134,265 +140,128 @@ function goBack() {
 async function postMessage() {
   if (question.value != "") {
     var id = counter.value
-    loading.value = true;
     messages.value.push({ 'message': question.value, 'type': 0 });
-    messages.value.push({ 'type': 1, 'loading': true, 'id': id });
+    messages.value.push({ "id": id, 'type': 1, 'loading': true });
+    loading.value = true;
     counter.value++
-    question.value = ""
+    const options = {
+      method: 'POST',
+      url: 'http://127.0.0.1:3000/backend/agent',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      data: {
+        prompt: question.value
+      }
+    };
 
-    await new Promise(r => setTimeout(r, 2000));
+    axios.request(options).then(function (response) {
+      const graph = response.data.response;
+      console.log(graph)
+      const lastMessage = messages.value[messages.value.length - 1];
+      lastMessage.loading = false;
+      loading.value = false;
+      question.value = ""
+      var myChart;
+      var option;
+      console.log('graph' + (counter.value - 1).toString())
+      if (graph.type) {
+        myChart = echarts.init(document.getElementById('graph' + (counter.value - 1).toString()));
+      }
 
-    const lastMessage = messages.value[messages.value.length - 1];
-    lastMessage.loading = false;
-    loading.value = false;
-    console.log('graph' + (counter.value - 1).toString())
-    var myChart = echarts.init(document.getElementById('graph' + (counter.value - 1).toString()));
-    var option;
-    if (counter.value == 1) {
-      option = {
-        title: {
-          text: 'ECharts Getting Started Example'
-        },
-        tooltip: {},
-        legend: {
-          data: ['sales']
-        },
-        xAxis: {
-          data: ['Shirts', 'Cardigans', 'Chiffons', 'Pants', 'Heels', 'Socks']
-        },
-        yAxis: {},
-        series: [
-          {
-            name: 'sales',
-            type: 'bar',
-            data: [5, 20, 36, 10, 10, 20]
-          }
-        ]
-      };
-    } if (counter.value == 2) {
-      option = {
-        title: {
-          text: 'Referer of a Website',
-          subtext: 'Fake Data',
-          left: 'center'
-        },
-        tooltip: {
-          trigger: 'item'
-        },
-        legend: {
-          orient: 'vertical',
-          left: 'left'
-        },
-        series: [
-          {
-            name: 'Access From',
-            type: 'pie',
-            radius: '50%',
-            data: [
-              { value: 1048, name: 'Search Engine' },
-              { value: 735, name: 'Direct' },
-              { value: 580, name: 'Email' },
-              { value: 484, name: 'Union Ads' },
-              { value: 300, name: 'Video Ads' }
-            ],
-            emphasis: {
-              itemStyle: {
-                shadowBlur: 10,
-                shadowOffsetX: 0,
-                shadowColor: 'rgba(0, 0, 0, 0.5)'
+      console.log("Graph type :" + graph.type)
+      switch (graph.type) {
+        case 'bar': option = {
+          title: {
+            text: graph.title
+          },
+          tooltip: {},
+          legend: {
+            data: [graph.name]
+          },
+          xAxis: {
+            data: graph.columnsName
+          },
+          yAxis: {},
+          series: [
+            {
+              name: 'sales',
+              type: 'bar',
+              data: graph.values
+            }
+          ]
+        };
+          // Display the chart using the configuration items and data just specified.
+          myChart.setOption(option);
+          break;
+        case 'pie': option = {
+          title: {
+            text: graph.title,
+            subtext: graph.subtitle,
+            left: 'center'
+          },
+          tooltip: {
+            trigger: 'item'
+          },
+          legend: {
+            orient: 'vertical',
+            left: 'left'
+          },
+          series: [
+            {
+              name: 'Access From',
+              type: 'pie',
+              radius: '50%',
+              data:
+                graph.datas
+              ,
+              emphasis: {
+                itemStyle: {
+                  shadowBlur: 10,
+                  shadowOffsetX: 0,
+                  shadowColor: 'rgba(0, 0, 0, 0.5)'
+                }
               }
             }
-          }
-        ]
-      };
-    } if (counter.value == 3) {
-      option = {
-        color: ['#80FFA5', '#00DDFF', '#37A2FF', '#FF0087', '#FFBF00'],
-        title: {
-          text: 'Gradient Stacked Area Chart'
-        },
-        tooltip: {
-          trigger: 'axis',
-          axisPointer: {
-            type: 'cross',
-            label: {
-              backgroundColor: '#6a7985'
-            }
-          }
-        },
-        legend: {
-          data: ['Line 1', 'Line 2', 'Line 3', 'Line 4', 'Line 5']
-        },
-        toolbox: {
-          feature: {
-            saveAsImage: {}
-          }
-        },
-        grid: {
-          left: '3%',
-          right: '4%',
-          bottom: '3%',
-          containLabel: true
-        },
-        xAxis: [
-          {
+          ]
+        };
+          // Display the chart using the configuration items and data just specified.
+          myChart.setOption(option);
+          break;
+        case 'line': option = {
+          xAxis: {
             type: 'category',
             boundaryGap: false,
-            data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-          }
-        ],
-        yAxis: [
-          {
+            data: graph.columnsName
+          },
+          yAxis: {
             type: 'value'
-          }
-        ],
-        series: [
-          {
-            name: 'Line 1',
-            type: 'line',
-            stack: 'Total',
-            smooth: true,
-            lineStyle: {
-              width: 0
-            },
-            showSymbol: false,
-            areaStyle: {
-              opacity: 0.8,
-              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                {
-                  offset: 0,
-                  color: 'rgb(128, 255, 165)'
-                },
-                {
-                  offset: 1,
-                  color: 'rgb(1, 191, 236)'
-                }
-              ])
-            },
-            emphasis: {
-              focus: 'series'
-            },
-            data: [140, 232, 101, 264, 90, 340, 250]
           },
-          {
-            name: 'Line 2',
-            type: 'line',
-            stack: 'Total',
-            smooth: true,
-            lineStyle: {
-              width: 0
-            },
-            showSymbol: false,
-            areaStyle: {
-              opacity: 0.8,
-              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                {
-                  offset: 0,
-                  color: 'rgb(0, 221, 255)'
-                },
-                {
-                  offset: 1,
-                  color: 'rgb(77, 119, 255)'
-                }
-              ])
-            },
-            emphasis: {
-              focus: 'series'
-            },
-            data: [120, 282, 111, 234, 220, 340, 310]
-          },
-          {
-            name: 'Line 3',
-            type: 'line',
-            stack: 'Total',
-            smooth: true,
-            lineStyle: {
-              width: 0
-            },
-            showSymbol: false,
-            areaStyle: {
-              opacity: 0.8,
-              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                {
-                  offset: 0,
-                  color: 'rgb(55, 162, 255)'
-                },
-                {
-                  offset: 1,
-                  color: 'rgb(116, 21, 219)'
-                }
-              ])
-            },
-            emphasis: {
-              focus: 'series'
-            },
-            data: [320, 132, 201, 334, 190, 130, 220]
-          },
-          {
-            name: 'Line 4',
-            type: 'line',
-            stack: 'Total',
-            smooth: true,
-            lineStyle: {
-              width: 0
-            },
-            showSymbol: false,
-            areaStyle: {
-              opacity: 0.8,
-              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                {
-                  offset: 0,
-                  color: 'rgb(255, 0, 135)'
-                },
-                {
-                  offset: 1,
-                  color: 'rgb(135, 0, 157)'
-                }
-              ])
-            },
-            emphasis: {
-              focus: 'series'
-            },
-            data: [220, 402, 231, 134, 190, 230, 120]
-          },
-          {
-            name: 'Line 5',
-            type: 'line',
-            stack: 'Total',
-            smooth: true,
-            lineStyle: {
-              width: 0
-            },
-            showSymbol: false,
-            label: {
-              show: true,
-              position: 'top'
-            },
-            areaStyle: {
-              opacity: 0.8,
-              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                {
-                  offset: 0,
-                  color: 'rgb(255, 191, 0)'
-                },
-                {
-                  offset: 1,
-                  color: 'rgb(224, 62, 76)'
-                }
-              ])
-            },
-            emphasis: {
-              focus: 'series'
-            },
-            data: [220, 302, 181, 234, 210, 290, 150]
-          }
-        ]
+          series: [
+            {
+              data: graph.values,
+              type: 'line',
+              areaStyle: {}
+            }
+          ]
+        };
+          // Display the chart using the configuration items and data just specified.
+          myChart.setOption(option);
+          break;
+        default:
+          console.log(response)
+          question.value = ""
+          messages.value.pop()
+          messages.value.push({ 'message': response.data.response, 'type': 1, 'loading': false, "isMessage": true });
+
+          const lastMessage = messages.value[messages.value.length - 1];
       };
-    }
+
+    }).catch(function (error) {
+      console.error(error);
+    });
 
 
-    // Display the chart using the configuration items and data just specified.
-    myChart.setOption(option);
+    // const chatContainer = document.querySelectorAll('.messages')[0];
+    // chatContainer.scrollTop = chatContainer.scrollHeight
   }
 
 }
@@ -434,11 +303,9 @@ function afficherDocuments() {
   if (documents.value.length >= 2) {
     showdocuments.value = true;
     showtraiterdocuments.value = true
-    showchatdocuments.value = true
   } else {
     showdocuments.value = false;
     showtraiterdocuments.value = false
-    showchatdocuments.value = false
   }
 }
 
