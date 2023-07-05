@@ -7,7 +7,7 @@ Ce projet est un site web
 | Préparation projet| 0%                    | 30%                   | 0%                    | 20%                   | 50%                   |
 | Database          | 40%                   | 0%                    | 60%                   | 0%                    | 0%                    |
 | Front End         | 0%                    | 30%                   | 0%                    | 60%                   | 10%                   |
-| Back End          | 70%                   | 0%                    | 30%                   | 0%                    | 0%                    |
+| Back End          | 65%                   | 0%                    | 30%                   | 0%                    | 5%                    |
 | LLM               | 100%                  | 0%                    | 0%                    | 0%                    | 0%                    |
 | Préparation live  | 0%                    | 0%                    | 0%                    | 0%                    | 100%                  |
 
