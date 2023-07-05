@@ -213,13 +213,8 @@ async function postMessage() {
           tooltip: {
             trigger: 'item'
           },
-          legend: {
-            orient: 'vertical',
-            left: 'left'
-          },
           series: [
             {
-              name: 'Access From',
               type: 'pie',
               radius: '50%',
               data:
