@@ -23,7 +23,7 @@
             <v-img class="mx-16" :width="950" cover src="../assets/screen.png"></v-img>
 
           </v-card>
-        </v-col>
+        </v-col> 
       </v-row>
     </v-container>
     <footer class="footer">
