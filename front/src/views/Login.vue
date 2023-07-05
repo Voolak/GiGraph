@@ -25,7 +25,7 @@
             </v-card>
             <v-alert v-if="alert" class="mt-6" density="compact" type="warning"
               title="Identifiant ou mot de passe incorrect"
-              text="Veuillez vérifier vos informations de connexions"></v-alert>
+              text="Veuillez vÃ©rifier vos informations de connexions"></v-alert>
           </v-col>
         </v-row>
       </v-container>
@@ -76,10 +76,9 @@ async function goChat() {
 
 <style>
 main {
-  background-color: #FFE4B5;
+  background-color: rgba(33, 150, 243, 0.3);
   display: flex;
   align-items: center;
-  background-color: #FFE4B5;
 }
 
 .login-title {

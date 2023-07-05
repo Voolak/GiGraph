@@ -173,6 +173,11 @@ async function postMessage() {
       console.log("Graph type :" + graph.type)
       switch (graph.type) {
         case 'bar': option = {
+          toolbox: {
+            feature: {
+              saveAsImage: {}
+            }
+          },
           title: {
             text: graph.title
           },
@@ -186,7 +191,6 @@ async function postMessage() {
           yAxis: {},
           series: [
             {
-              name: 'sales',
               type: 'bar',
               data: graph.values
             }
@@ -196,6 +200,11 @@ async function postMessage() {
           myChart.setOption(option);
           break;
         case 'pie': option = {
+          toolbox: {
+            feature: {
+              saveAsImage: {}
+            }
+          },
           title: {
             text: graph.title,
             subtext: graph.subtitle,
@@ -230,6 +239,11 @@ async function postMessage() {
           myChart.setOption(option);
           break;
         case 'line': option = {
+          toolbox: {
+            feature: {
+              saveAsImage: {}
+            }
+          },
           xAxis: {
             type: 'category',
             boundaryGap: false,

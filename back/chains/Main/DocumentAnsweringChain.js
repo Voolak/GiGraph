@@ -28,6 +28,7 @@ export class DocumentAnsweringChain extends BaseChain {
         verbose: false,
         openAIApiKey: process.env.OPENAI_API_KEY,
       });
+      
       console.log(inputs)
 
       const sanitizedQuestion = inputs.text;
