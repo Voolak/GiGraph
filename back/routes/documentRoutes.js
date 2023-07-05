@@ -21,14 +21,14 @@ router.get('/get', getDocumentsByExchange);
 
 router.get('/exchanges/:exchangeId/documents', getDocumentsByExchange);
 
-router.get('/exchanges/:exchangeId/documents', getDocumentsByExchange);
-
 router.post('/uploadDocument', upload.single('file'), async (req, res) => {
     try {
       const file = req.file; // Access the uploaded file through req.file
 
       // Call saveFiles() function with the file
       await saveFiles(file);
+    
+     
   
       res.json({ message: 'Document created successfully' });
     } catch (error) {
@@ -40,6 +40,7 @@ router.post('/uploadDocument', upload.single('file'), async (req, res) => {
 export default router;
 
 async function saveFiles(file) {
+
 
   const sourcePath = file.path; // Temporary path of the uploaded file
   const destinationPath = 'documents/RobertGirafe/docs/' + file.originalname; // Destination path with the original file name

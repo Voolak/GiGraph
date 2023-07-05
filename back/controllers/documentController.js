@@ -87,9 +87,3 @@ export async function getExchange(req, res) {
   //   res.status(500).send("Error processing request");
   // }
 }
-
-
-//traiter les documents
-// - récupérer les noms de docs dans le front et recuperer les donnees de chaque doc dans la bd (avec le userId)
-// - appeler l'embedding avec ces docs là
-// - enregistrer les embeddings dans documents/RobertGirafe/vectors/iut et enregistrer le chemin dans la bd (dans exchange)
