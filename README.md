@@ -4,17 +4,12 @@ Ce projet est un site web
 
 | Contributeur      | Alexandre Choplin     | Romain Bedouret       | Cloé Magnien          | Bastien Oswald        | Andgel Barzana        |
 | ----------------- | --------------------- | --------------------- | --------------------- | --------------------- | --------------------- |
-| Maquette          | 0%                    | 0%                    | 0%                    | 100%                  | 0%                    |
-| Database          | 0%                    | 0%                    | 100%                  | 0%                    | 0%                    |
-| Front End         | 0%                    | 30%                   | 0%                    | 70%                   | 0%                    |
-| Back End          | 0%                    | 0%                    | 0%                    | 0%                    | 0%                    |
+| Préparation projet| 0%                    | 30%                   | 0%                    | 20%                   | 50%                   |
+| Database          | 40%                   | 0%                    | 60%                   | 0%                    | 0%                    |
+| Front End         | 0%                    | 30%                   | 0%                    | 60%                   | 10%                   |
+| Back End          | 70%                   | 0%                    | 30%                   | 0%                    | 0%                    |
 | LLM               | 100%                  | 0%                    | 0%                    | 0%                    | 0%                    |
-| Documentation     | 0%                    | 0%                    | 0%                    | 0%                    | 100%                  |
-## Démarrage
-
-Le projet est accessible sur le site [GiGraph](https://gigraph.fr)
-
-## Fabriqué avec
+| Préparation live  | 0%                    | 0%                    | 0%                    | 0%                    | 100%                  |
 
 ### Back-end
 * [LangChain](https://github.com/hwchase17/langchainjs) - Framework JS LLM
@@ -26,7 +21,6 @@ Le projet est accessible sur le site [GiGraph](https://gigraph.fr)
 * [Echart](https://echarts.apache.org) - Librairie Visualisation JS
 ### Logiciels
 * [Node.js](https://nodejs.org) - (version 1.18 minimum)
-* [Python](https://www.python.org) - (version 3.10.11 minimum)
 ### Database
 * [Prisma](https://www.prisma.io) - ORM
 * [MySQL](https://www.mysql.com) - Database
