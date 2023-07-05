@@ -9,11 +9,11 @@
                     <v-card class="mx-auto" max-width="400">
                         <v-list v-show="showdocuments">
                             <v-card v-for="(document, index) in documents" :key="index" class="mx-auto" max-width="400">
-                                <v-list-item>
+                                <v-list-item :style="{ border: !document[1] && !document.title ? '2px solid red' : '' }">
                                     <v-list-item-content class="centered-content">
                                       <v-list-item-title v-if="index === 0">{{ document.title }}</v-list-item-title>
                                       <template v-else>
-                                        <v-list-item-subtitle>{{ document }}</v-list-item-subtitle>
+                                        <v-list-item-subtitle>{{ document[0] }}</v-list-item-subtitle>
                                         <v-list-item-action class="align-right">
                                           <v-btn size="x-small" variant="outlined" icon @click="deleteDocument(index)">
                                             <v-icon size="x-large">mdi-delete</v-icon>
@@ -22,11 +22,11 @@
                                       </template>
                                     </v-list-item-content>
                                   </v-list-item>
-                                  
                             </v-card>
                         </v-list>
                     </v-card>
-                    <v-btn v-show="showtraiterdocuments" class="my-5" @click="traiterDocuments()">
+                    <div v-if="hasToTreatDocs" :style="{fontSize: '17px', padding: '3px', backgroundColor: 'black', margin: 'auto', opacity: '60%', width: '90%', borderRadius: '5px', color: 'red', textAlign: 'center', marginTop: '10px'}">Vous avez des documents à traiter.</div>
+                    <v-btn v-show="hasToTreatDocs" class="my-5" @click="traiterDocuments()">
                         Traiter les documents
                     </v-btn>
                 </v-list>
@@ -108,228 +108,258 @@
 </template>
   
 <script setup>
-import { reactive, ref, onMounted } from "vue";
-import { useRouter } from "vue-router";
-import axios from 'axios';
-import * as echarts from 'echarts';
+  import { reactive, ref, onMounted } from "vue";
+  import { useRouter } from "vue-router";
+  import axios from 'axios';
+  import * as echarts from 'echarts';
 
-const router = useRouter()
+  const router = useRouter()
 
-const question = ref("");
-const messages = ref([])
-const loading = ref(false);
-const counter = ref(0)
-const files = ref([]);
+  const question = ref("");
+  const messages = ref([])
+  const loading = ref(false);
+  const counter = ref(0)
+  const files = ref([]);
 
 
-const showdocuments = ref(false);
-const showtraiterdocuments = ref(false);
+  const showdocuments = ref(false);
+  const hasToTreatDocs = ref(false);
 
-const documents = ref([
-  { type: 'subheader', title: 'Vos documents' }
-],);
+  const documents = ref([
+    { type: 'subheader', title: 'Vos documents' }
+  ],);
 
-const discussions = ref([
-  { type: 'subheader', title: 'Vos dicussions' }
-],);
+  const discussions = ref([
+    { type: 'subheader', title: 'Vos dicussions' }
+  ],);
 
-function goBack() {
-  router.push({ name: "Login" });
-}
+  onMounted(() => {
+    axios
+      .get('http://127.0.0.1:3000/document/get', { 
+        params: {
+          userId: 1,
+        }
+      }).then(response => {
+        console.log('success');
+        response.data.map((line) => {
+          let processed = true;
+          if (line[1] !== 'PROCESSED') {
+            hasToTreatDocs.value = true;
+            processed = false;
+          }
+          documents.value.push([line[0].name, processed]);
+        });
+        console.log(hasToTreatDocs.value);
+        shouldTreatDocs();
+        console.log(hasToTreatDocs.value);
+        
+        showdocuments.value = documents.value.length > 0;
+      }).catch(error => {
+        console.error(error);
+      });
+  });
 
-async function postMessage() {
-  if (question.value != "") {
-    var id = counter.value
-    messages.value.push({ 'message': question.value, 'type': 0 });
-    messages.value.push({ "id": id, 'type': 1, 'loading': true });
-    loading.value = true;
-    counter.value++
-    const options = {
-      method: 'POST',
-      url: 'http://127.0.0.1:3000/backend/agent',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      data: {
-        prompt: question.value
-      }
-    };
+  function goBack() {
+    router.push({ name: "Login" });
+  }
 
-    axios.request(options).then(function (response) {
-      const graph = response.data.response;
-      console.log(graph)
-      const lastMessage = messages.value[messages.value.length - 1];
-      lastMessage.loading = false;
-      loading.value = false;
-      question.value = ""
-      var myChart;
-      var option;
-      console.log('graph' + (counter.value - 1).toString())
-      if (graph.type) {
-        myChart = echarts.init(document.getElementById('graph' + (counter.value - 1).toString()));
-      }
-
-      console.log("Graph type :" + graph.type)
-      switch (graph.type) {
-        case 'bar': option = {
-          title: {
-            text: graph.title
-          },
-          tooltip: {},
-          legend: {
-            data: [graph.name]
-          },
-          xAxis: {
-            data: graph.columnsName
-          },
-          yAxis: {},
-          series: [
-            {
-              name: 'sales',
-              type: 'bar',
-              data: graph.values
-            }
-          ]
-        };
-          // Display the chart using the configuration items and data just specified.
-          myChart.setOption(option);
-          break;
-        case 'pie': option = {
-          title: {
-            text: graph.title,
-            subtext: graph.subtitle,
-            left: 'center'
-          },
-          tooltip: {
-            trigger: 'item'
-          },
-          legend: {
-            orient: 'vertical',
-            left: 'left'
-          },
-          series: [
-            {
-              name: 'Access From',
-              type: 'pie',
-              radius: '50%',
-              data:
-                graph.datas
-              ,
-              emphasis: {
-                itemStyle: {
-                  shadowBlur: 10,
-                  shadowOffsetX: 0,
-                  shadowColor: 'rgba(0, 0, 0, 0.5)'
-                }
-              }
-            }
-          ]
-        };
-          // Display the chart using the configuration items and data just specified.
-          myChart.setOption(option);
-          break;
-        case 'line': option = {
-          xAxis: {
-            type: 'category',
-            boundaryGap: false,
-            data: graph.columnsName
-          },
-          yAxis: {
-            type: 'value'
-          },
-          series: [
-            {
-              data: graph.values,
-              type: 'line',
-              areaStyle: {}
-            }
-          ]
-        };
-          // Display the chart using the configuration items and data just specified.
-          myChart.setOption(option);
-          break;
-        default:
-          console.log(response)
-          question.value = ""
-          messages.value.pop()
-          messages.value.push({ 'message': response.data.response, 'type': 1, 'loading': false, "isMessage": true });
-
-          const lastMessage = messages.value[messages.value.length - 1];
+  async function postMessage() {
+    if (question.value != "") {
+      var id = counter.value
+      messages.value.push({ 'message': question.value, 'type': 0 });
+      messages.value.push({ "id": id, 'type': 1, 'loading': true });
+      loading.value = true;
+      counter.value++
+      const options = {
+        method: 'POST',
+        url: 'http://127.0.0.1:3000/backend/agent',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        data: {
+          prompt: question.value
+        }
       };
 
-    }).catch(function (error) {
-      console.error(error);
-    });
+      axios.request(options).then(function (response) {
+        const graph = response.data.response;
+        console.log(graph)
+        const lastMessage = messages.value[messages.value.length - 1];
+        lastMessage.loading = false;
+        loading.value = false;
+        question.value = ""
+        var myChart;
+        var option;
+        console.log('graph' + (counter.value - 1).toString())
+        if (graph.type) {
+          myChart = echarts.init(document.getElementById('graph' + (counter.value - 1).toString()));
+        }
+
+        console.log("Graph type :" + graph.type)
+        switch (graph.type) {
+          case 'bar': option = {
+            title: {
+              text: graph.title
+            },
+            tooltip: {},
+            legend: {
+              data: [graph.name]
+            },
+            xAxis: {
+              data: graph.columnsName
+            },
+            yAxis: {},
+            series: [
+              {
+                name: 'sales',
+                type: 'bar',
+                data: graph.values
+              }
+            ]
+          };
+            // Display the chart using the configuration items and data just specified.
+            myChart.setOption(option);
+            break;
+          case 'pie': option = {
+            title: {
+              text: graph.title,
+              subtext: graph.subtitle,
+              left: 'center'
+            },
+            tooltip: {
+              trigger: 'item'
+            },
+            legend: {
+              orient: 'vertical',
+              left: 'left'
+            },
+            series: [
+              {
+                name: 'Access From',
+                type: 'pie',
+                radius: '50%',
+                data:
+                  graph.datas
+                ,
+                emphasis: {
+                  itemStyle: {
+                    shadowBlur: 10,
+                    shadowOffsetX: 0,
+                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                  }
+                }
+              }
+            ]
+          };
+            // Display the chart using the configuration items and data just specified.
+            myChart.setOption(option);
+            break;
+          case 'line': option = {
+            xAxis: {
+              type: 'category',
+              boundaryGap: false,
+              data: graph.columnsName
+            },
+            yAxis: {
+              type: 'value'
+            },
+            series: [
+              {
+                data: graph.values,
+                type: 'line',
+                areaStyle: {}
+              }
+            ]
+          };
+            // Display the chart using the configuration items and data just specified.
+            myChart.setOption(option);
+            break;
+          default:
+            console.log(response)
+            question.value = ""
+            messages.value.pop()
+            messages.value.push({ 'message': response.data.response, 'type': 1, 'loading': false, "isMessage": true });
+
+            const lastMessage = messages.value[messages.value.length - 1];
+        };
+
+      }).catch(function (error) {
+        console.error(error);
+      });
 
 
-    // const chatContainer = document.querySelectorAll('.messages')[0];
-    // chatContainer.scrollTop = chatContainer.scrollHeight
+      // const chatContainer = document.querySelectorAll('.messages')[0];
+      // chatContainer.scrollTop = chatContainer.scrollHeight
+    }
+
   }
 
-}
+  function ajouterDocument() {
+    documents.value.push([files.value[files.value.length - 1].name, false]);
+    console.log(files.value[files.value.length - 1], files);
+    let formData = new FormData();
+    formData.append('file', files.value[files.value.length - 1])
 
-function ajouterDocument() {
-  documents.value.push(files.value[files.value.length - 1].name);
-  console.log(files.value[files.value.length - 1], files);
-  let formData = new FormData();
-  formData.append('file', files.value[files.value.length - 1])
+    axios.post('http://127.0.0.1:3000/document/uploadDocument',
+      formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'Content-Size': files.value[files.value.length - 1].size
+        }
+      })
+      .then(function (response) {
+        console.log(response);
+        console.log(response.data.res);
+        console.log('success');
+      }).catch(function (error) {
+        console.error(error);
+      });
 
-  axios.post('http://127.0.0.1:3000/document/uploadDocument',
-    formData,
-    {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-        'Content-Size': files.value[files.value.length - 1].size
-      }
-    })
-    .then(function (response) {
-      console.log(response);
-      console.log(response.data.res);
-      console.log('success');
-    }).catch(function (error) {
-      console.error(error);
-    });
-
-  files.value = [];
-  afficherDocuments();
-}
-
-function deleteDocument(index) {
-  if (index > 0) {
-    documents.value.splice(index, 1);
+    files.value = [];
     afficherDocuments();
+    shouldTreatDocs();
   }
-}
 
-function afficherDocuments() {
-  if (documents.value.length >= 2) {
-    showdocuments.value = true;
-    showtraiterdocuments.value = true
-  } else {
-    showdocuments.value = false;
-    showtraiterdocuments.value = false
+  function deleteDocument(index) {
+    if (index > 0) {
+      documents.value.splice(index, 1);
+      afficherDocuments();
+      shouldTreatDocs();
+    }
   }
-}
 
-function traiterDocuments() {
-  showtraiterdocuments.value = false;
+  function afficherDocuments() {
+    if (documents.value.length >= 2) {
+      showdocuments.value = true;
+    } else {
+      showdocuments.value = false;
+    }
+  }
 
-  console.log(documents.value);
-
-  axios
-    .get('http://127.0.0.1:3000/backend/embedding', { 
-      params: {
-        documents: documents.value,
-        userId: 1,
+  function shouldTreatDocs() {
+    let hasOneNotProcessed = false;
+    documents.value.map((line) => {
+      if (!line[1] && !line.title) {
+        hasOneNotProcessed = true;
       }
-    }).then(response => {
-      console.log(response);
-      console.log(response.data);
-      console.log('success');
-      let documents = response.data;
-    }).catch(error => {
-      console.error(error);
     });
-  
-}
+    hasToTreatDocs.value = hasOneNotProcessed;
+  }
+
+  function traiterDocuments() {
+    axios
+      .get('http://127.0.0.1:3000/backend/embedding', { 
+        params: {
+          userId: 1,
+        }
+      }).then(response => {
+        console.log('success');
+        let documents = response.data;
+        hasToTreatDocs.value = false;
+      }).catch(error => {
+        console.error(error);
+      });
+    
+  }
 
 </script>
 
@@ -346,7 +376,6 @@ function traiterDocuments() {
 
 .chat {
   background-color: rgba(33, 150, 243, 0.1);
-
 }
 
 .custom-label .v-label {

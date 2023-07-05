@@ -2,18 +2,30 @@ import { PrismaClient } from '@prisma/client';
 
 
 export async function getDocuments(req, res) {
-  const userId = req.session.userId;
+  const userId = req.userId ?? 1;
   const prisma = new PrismaClient();
   // if (userId != "undefined" && userId != "" && userId != null) {
     try {
+      const exchangeDocuments = await prisma.exchangeDocument.findMany({
+        where: {
+          exchangeId: 1,
+        }
+      });
       const documents = await prisma.document.findMany({
         where: {
-            userId: userId,
-            // userId: parseInt(userId),
+          id: {
+            in: exchangeDocuments.map((exchangeDocument) => exchangeDocument.documentId),
+          },
         },
       });
+
+      const data = exchangeDocuments.map((exchangeDocument) => {
+        const document = documents.find((document) => document.id === exchangeDocument.documentId);
+        return [document, exchangeDocument.processed];
+      });
+      console.log(data);
       
-      res.status(200).json(documents);
+      res.status(200).json(data);
     } catch (error) {
       console.error(error);
       res.status(500).send("Error processing request");
