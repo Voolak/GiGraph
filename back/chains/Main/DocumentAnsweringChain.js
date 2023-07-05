@@ -34,7 +34,7 @@ export class DocumentAnsweringChain extends BaseChain {
 
       const retrievedContext = await vectorStore.similaritySearch(
         sanitizedQuestion,
-        3
+        2
       );
   
       var context = "";
@@ -47,7 +47,7 @@ export class DocumentAnsweringChain extends BaseChain {
         ---------------------
         ${context}
         ---------------------
-        Compte tenu des informations contextuelles et non des connaissances préalables, répondez à la question suivante : ${sanitizedQuestion} ?:
+        Compte tenu des informations contextuelles et non des connaissances préalables, répondez à la question suivante du mieux que vous pouvez : ${sanitizedQuestion} ?:
         
         `;
   
