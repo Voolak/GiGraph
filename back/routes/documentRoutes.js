@@ -53,10 +53,16 @@ async function saveFiles(file) {
   const document = await prisma.document.create({
     data: {
       name: file.originalname,
-      directory : destinationPath,
+      directory: destinationPath,
       userId: 1, // Replace with the actual user ID
+      ExchangeDocument: {
+        create: {
+          exchange: { connect: { id: 1 } }, // Replace 1 with the actual exchange ID
+          processed: 'NOT_PROCESSED',
+        },
+      },
     },
   });
-
+  
   console.log('Saved file:', destinationPath);
 }
