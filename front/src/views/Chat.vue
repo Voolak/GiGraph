@@ -126,7 +126,7 @@
             hasToTreatDocs.value = true;
             processed = false;
           }
-          documents.value.push([line[0].name, processed]);
+          documents.value.push([line[0].name, processed, line[0].id]);
         });
         
         shouldTreatDocs();
@@ -276,10 +276,10 @@
   }
 
   function ajouterDocument() {
-    documents.value.push([files.value[files.value.length - 1].name, false]);
     let formData = new FormData();
     formData.append('file', files.value[files.value.length - 1])
 
+    let documentSaved;
     axios.post('http://127.0.0.1:3000/document/uploadDocument',
       formData,
       {
@@ -289,11 +289,14 @@
         }
       })
       .then(function (response) {
+        console.log(response);
+        documentSaved = response.document;
         console.log('success');
       }).catch(function (error) {
         console.error(error);
       });
 
+    documents.value.push([documentSaved.name, false, documentSaved.id]);
     files.value = [];
     afficherDocuments();
     shouldTreatDocs();
@@ -301,6 +304,16 @@
 
   function deleteDocument(index) {
     if (index > 0) {
+      axios.post('http://127.0.0.1:3000/document/delete',
+      {
+        documentId: documents.value[index][2]
+      })
+      .then(function (response) {
+        console.log('success');
+      }).catch(function (error) {
+        console.error(error);
+      });
+      
       documents.value.splice(index, 1);
       afficherDocuments();
       shouldTreatDocs();

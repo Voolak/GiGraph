@@ -87,3 +87,36 @@ export async function getExchange(req, res) {
   //   res.status(500).send("Error processing request");
   // }
 }
+
+export async function deleteDocument(req, res) {
+  console.log(req.body);
+  const documentId = req.body.documentId;
+  const prisma = new PrismaClient();
+
+  try {
+    const exchangeDocument = await prisma.exchangeDocument.findFirst({
+      where: {
+        documentId: documentId,
+      },
+    });
+
+    await prisma.exchangeDocument.delete({
+      where: {
+        id: exchangeDocument.id,
+      },
+    });
+
+    await prisma.document.delete({
+      where: {
+        id: documentId,
+      },
+    });
+
+    res.status(200).json({ message: 'Document deleted successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error processing request');
+  } finally {
+    await prisma.$disconnect();
+  }
+}

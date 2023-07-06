@@ -1,6 +1,6 @@
 import express from 'express';
 import { Router } from 'express';
-import { getDocuments, getExchange, getDocumentsByExchange } from '../controllers/documentController.js';
+import { getDocuments, getExchange, getDocumentsByExchange, deleteDocument } from '../controllers/documentController.js';
 import multer from 'multer';
 import fs from 'fs';
 import { PrismaClient } from '@prisma/client';
@@ -21,16 +21,16 @@ router.get('/get', getDocumentsByExchange);
 
 router.get('/exchanges/:exchangeId/documents', getDocumentsByExchange);
 
+router.post('/delete', deleteDocument);
+
 router.post('/uploadDocument', upload.single('file'), async (req, res) => {
     try {
       const file = req.file; // Access the uploaded file through req.file
 
       // Call saveFiles() function with the file
-      await saveFiles(file);
-    
-     
+      const document = await saveFiles(file);
   
-      res.json({ message: 'Document created successfully' });
+      res.json({ message: 'Document created successfully', document: document });
     } catch (error) {
       console.error('Error creating document:', error);
       res.status(500).json({ error: 'Failed to create document' });
@@ -40,8 +40,6 @@ router.post('/uploadDocument', upload.single('file'), async (req, res) => {
 export default router;
 
 async function saveFiles(file) {
-
-
   const sourcePath = file.path; // Temporary path of the uploaded file
   const destinationPath = 'documents/RobertGirafe/docs/' + file.originalname; // Destination path with the original file name
 
@@ -59,4 +57,5 @@ async function saveFiles(file) {
   });
 
   console.log('Saved file:', destinationPath);
+  return document;
 }
