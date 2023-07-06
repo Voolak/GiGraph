@@ -3,37 +3,71 @@ import { OpenAIEmbeddings } from "langchain/embeddings/openai";
 import { PDFLoader } from "langchain/document_loaders/fs/pdf";
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 import { DirectoryLoader } from "langchain/document_loaders/fs/directory";
-import {
-  JSONLoader,
-  JSONLinesLoader,
-} from "langchain/document_loaders/fs/json";
 import { TextLoader } from "langchain/document_loaders/fs/text";
-import { CSVLoader } from "langchain/document_loaders/fs/csv";
 import { DocxLoader } from "langchain/document_loaders/fs/docx";
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, ProcessStatus } from '@prisma/client';
+import fs from 'fs';
+import { PDFDocument } from 'pdf-lib'; 
 
 export async function getEmbedding(req, res) {
-  if (req.session.userId != "undefined" && req.session.userId != ""  && req.session.userId != null){
+  const user = (req.query.userId ?? '1');
+  if (user != "undefined" && user != ""  && user != null) {
+    let exchangeDocuments;
+    let documents;
+    const prisma = new PrismaClient();
     try {
-
+      exchangeDocuments = await prisma.exchangeDocument.findMany({
+        where: {
+          exchangeId: 1,
+        }
+      });
+      documents = await prisma.document.findMany({
+        where: {
+          id: {
+            in: exchangeDocuments.map((exchangeDocument) => exchangeDocument.documentId),
+          },
+        },
+      });
       
-        await embedFiles();
-        //Render OK
-        res.status(200).send("Done");
+      const copyPromises = documents.map((document) => {
+        return copyFile(document.directory, 'documents/RobertGirafe/exchangeDocs/' + document.name + '.pdf');
+      });
+    
+      await Promise.all(copyPromises);
 
+      //saveFiles('documents/RobertGirafe/docs', docs);
     } catch (error) {
       console.error(error);
-      res.status(500).send("Error processing request");
+      return res.status(500).json({error: "Couldn't get the documents"});
     }
-  }else{
-    res.status(500).send("Error processing request");
+
+    try {
+      const directoryfor = await embedFiles();
+      //Render OK
+      exchangeDocuments.forEach(async (exchangeDocument) => {
+        const data = await prisma.exchangeDocument.update({
+          where: {
+            id: exchangeDocument.id,
+          },
+          data: {
+            processed: ProcessStatus.PROCESSED,
+          }
+        });
+      });
+      documents.map((document) => {fs.unlinkSync('documents/RobertGirafe/exchangeDocs/' + document.name + '.pdf')});
+      return res.json("Traitement des documents terminé");
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({error: "Error processing request"});
+    }
+  } else {
+      return res.status(500).send("Error processing request");
   }
 }
 
-  async function embedFiles(directory = "documents/RobertGirafe/docs/"){
-  
+   async function embedFiles(){
     const loader = new DirectoryLoader(
-      directory,
+      "documents/RobertGirafe/exchangeDocs/",
       {
         ".txt": (path) => new TextLoader(path),
         ".pdf": (path) => new PDFLoader(path),
@@ -51,7 +85,7 @@ export async function getEmbedding(req, res) {
         doc.pageContent = doc.pageContent.replace(/(\n\s*)+/g, '\n');
         doc.pageContent = doc.pageContent.trim().replaceAll('\n', '  ');
     });
-    console.log(docs)
+
     // Create vector store and index the docs
     const vectorStore = await HNSWLib.fromDocuments(docs, new OpenAIEmbeddings());
 
@@ -60,15 +94,41 @@ export async function getEmbedding(req, res) {
     await vectorStore.save(directoryfor);
   }
 
-  function saveFiles(){
-      // Create a directory to save the files
-    const directoryPath = 'documents/RobertGirafe/docs'; // Specify the directory path where you want to save the files
+  async function copyFile(sourceFilePath, destinationFilePath) {
+    try {
+      // Charger le fichier source PDF
+      const sourcePDFBytes = await fs.promises.readFile(sourceFilePath);
+      const sourcePDF = await PDFDocument.load(sourcePDFBytes);
+  
+      // Créer un nouveau document PDF vide
+      const destinationPDF = await PDFDocument.create();
+  
+      // Copier chaque page du fichier source vers le fichier de destination
+      const pagesCount = sourcePDF.getPageCount();
+      for (let pageIndex = 0; pageIndex < pagesCount; pageIndex++) {
+        const [copiedPage] = await destinationPDF.copyPages(sourcePDF, [pageIndex]);
+        destinationPDF.addPage(copiedPage);
+      }
+  
+      // Enregistrer le fichier de destination
+      const destinationPDFBytes = await destinationPDF.save();
+      await fs.promises.writeFile(destinationFilePath, destinationPDFBytes);
+  
+      console.log('Fichier PDF copié avec succès.');
+    } catch (error) {
+      console.error('Erreur lors de la copie du fichier PDF :', error);
+    }
+  }
+
+  function saveFiles(directoryPath = 'documents/RobertGirafe/docs', files){
+    // Create a directory to save the files
+    // the directory path where you want to save the files
     if (!fs.existsSync(directoryPath)) {
       fs.mkdirSync(directoryPath);
     }
 
     // Save each file in the directory
-    req.files.forEach((file) => {
+    files.forEach((file) => {
       const filePath = `${directoryPath}/${file.originalname}`;
 
       // Use the fs.writeFile function to save the file

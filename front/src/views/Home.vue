@@ -38,38 +38,38 @@
 </template>
 
 <script setup>
-import TopHeader from '@/components/TopHeader.vue'
+  import TopHeader from '@/components/TopHeader.vue'
 </script>
 
 <style>
-.font {
-  background-color: rgba(33, 150, 243, 0.3);
-  ;
-}
+  .font {
+    background-color: rgba(33, 150, 243, 0.3);
+  }
 
-.main-container {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
+  .main-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
 
-.footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px;
-  background-color: #f5f5f5;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-}
+  .footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background-color: #f5f5f5;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+  }
 
-.graph-icon {
-  font-size: 20px;
-  font-weight: bold;
-}
+  .graph-icon {
+    font-size: 20px;
+    font-weight: bold;
+  }
 
-.year {
-  text-align: right;
-}</style>
+  .year {
+    text-align: right;
+  }
+</style>

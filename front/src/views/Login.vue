@@ -34,64 +34,63 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
-import { useRouter } from "vue-router";
-import axios from 'axios';
+  import { ref } from "vue";
+  import { useRouter } from "vue-router";
+  import axios from 'axios';
 
-const email = ref('robert@girafe.ia')
-const password = ref('123')
-const loading = ref(false)
-const alert = ref(false)
-const router = useRouter()
+  const email = ref('robert@girafe.ia')
+  const password = ref('123')
+  const loading = ref(false)
+  const alert = ref(false)
+  const router = useRouter()
 
-async function goChat() {
-  const options = {
-    method: 'POST',
-    url: 'http://127.0.0.1:3000/auth/login',
-    headers: {
-      cookie: 'connect.sid=s%253AhX8dQcHMbpo3ngx8QbkCi2mBhz-VxToN.8fvPraHK4PaSOkeQUNX9xi34cnqqwhBIpwn2314wX%252BM',
-      'Content-Type': 'application/x-www-form-urlencoded'
-    },
-    data: { email: email.value, password: password.value }
-  };
+  async function goChat() {
+    const options = {
+      method: 'POST',
+      url: 'http://127.0.0.1:3000/auth/login',
+      headers: {
+        cookie: 'connect.sid=s%253AhX8dQcHMbpo3ngx8QbkCi2mBhz-VxToN.8fvPraHK4PaSOkeQUNX9xi34cnqqwhBIpwn2314wX%252BM',
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      data: { email: email.value, password: password.value }
+    };
 
-  axios.request(options).then(function (response) {
-    if (response.status == 200) {
-      loading.value = true
-      router.push({ name: "Chat" });
-    } else {
+    axios.request(options).then(function (response) {
+      if (response.status == 200) {
+        loading.value = true
+        router.push({ name: "Chat" });
+      } else {
+        loading.value = true
+        alert.value = true
+        loading.value = false
+      }
+    }).catch(function (error) {
+      console.error(error);
       loading.value = true
       alert.value = true
       loading.value = false
-    }
-  }).catch(function (error) {
-    console.error(error);
-    loading.value = true
-    alert.value = true
-    loading.value = false
-  });
-}
-
+    });
+  }
 </script>
 
 <style>
-main {
-  background-color: rgba(33, 150, 243, 0.3);
-  display: flex;
-  align-items: center;
-}
+  main {
+    background-color: rgba(33, 150, 243, 0.3);
+    display: flex;
+    align-items: center;
+  }
 
-.login-title {
-  margin-top: 20px;
-  margin-bottom: 20px;
-}
+  .login-title {
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
 
-.login-title-text {
-  font-size: 20px;
-}
+  .login-title-text {
+    font-size: 20px;
+  }
 
-.connexion-button--custom {
-  width: 30%;
-  color: #000000;
-}
+  .connexion-button--custom {
+    width: 30%;
+    color: #000000;
+  }
 </style>

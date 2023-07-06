@@ -9,7 +9,7 @@ generator client {
 
 datasource db {
     provider = "mysql"
-    url      = "mysql://root:root@localhost:3306/db_gigraph"
+    url      = "mysql://root:@localhost:3306/db_gigraph"
 }
 
 model User {
@@ -40,7 +40,7 @@ model Prompt {
 
 model Answer {
     id         Int      @id @default(autoincrement())
-    output     String?  @db.Text() // or @db.LongText()
+    output     String
     exchange   Exchange @relation(fields: [exchangeId], references: [id])
     exchangeId Int
     created_at DateTime @default(now())
@@ -49,7 +49,8 @@ model Answer {
 model Graph {
     id         Int      @id @default(autoincrement())
     type       String
-    data       String?  @db.Text() // or @db.LongText()
+    code       String
+    data       String   @default("{}")
     exchange   Exchange @relation(fields: [exchangeId], references: [id])
     exchangeId Int
     created_at DateTime @default(now())
