@@ -9,7 +9,7 @@
               <h3><strong>Bonjour et bienvenue sur GiGraph. </strong></h3><br>
               Grâce à cette application web, vous pouvez visualiser vos données sous forme de texte et/ou de graphe en chargeant vos documents .PDF, .TXT et .docs. 
               <br><br>
-              <strong>Attention :</strong> Veillez à toujours cliquer sur le bouton 'Traiter les documents' lorsque vous ajoutez un nouveau document.
+              <strong>Attention :</strong> Veillez à toujours cliquer sur le bouton 'Traiter les documents' lorsque vous ajoutez / supprimez un nouveau document.
             </v-card-text>
             <v-card-text>
               <br>
