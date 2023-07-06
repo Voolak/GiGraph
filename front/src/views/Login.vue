@@ -38,8 +38,8 @@ import { ref } from "vue";
 import { useRouter } from "vue-router";
 import axios from 'axios';
 
-const email = ref('')
-const password = ref('')
+const email = ref('robert@girafe.ia')
+const password = ref('123')
 const loading = ref(false)
 const alert = ref(false)
 const router = useRouter()

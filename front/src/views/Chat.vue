@@ -4,7 +4,7 @@
       <v-navigation-drawer class="bg-blue pa-2 pt-10" theme="" permanent>
         <v-img class="mx-16" :width="100" cover src="../assets/logo.png"></v-img>
         <v-list color="transparent">
-          <v-list-item prepend-icon="mdi-account-box" title="Bastien Oswald" class="mb-7"></v-list-item>
+          <v-list-item prepend-icon="mdi-account-box" title="Robert Girafe" class="mb-7"></v-list-item>
           <v-file-input prepend-icon="" v-model="files" label="AJOUTER UN DOCUMENT" variant="solo-filled"
             accept=".pdf,.csv,.sql" @change="ajouterDocument" class="custom-label"></v-file-input>
           <v-card class="mx-auto" max-width="400">
