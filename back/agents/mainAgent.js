@@ -56,11 +56,11 @@ export const run = async (question, userId) => {
     }),
     new DynamicStructuredTool({
       name: "graph-generator-from-context",
-      description: "You must call the document-answerer tool beforehand to use this tool. This tool generates graphs based on context given by the tool `document-answerer`. It can not be called before ",
+      description: "You must call the document-answerer tool beforehand to use this tool. This tool generates graphs based on context given by the tool `document-answerer`.",
       schema: z.object({
         text: z.string().describe("the users question"),
         type: z.string().describe("graph type"),
-        data: z.string().describe("informations from the tool `document-answerer`"),
+        data: z.string().describe("a string of informations from the tool `document-answerer`"),
       }),
       func: async ({ text, type, data }) =>{
         try {
@@ -88,7 +88,7 @@ export const run = async (question, userId) => {
   });
   console.log("Loaded agent.");
 
-  const input = "Question :' "+question+" . '. If the user wants a graph, first fetch the informations to display in the document-answerer tool and then only, call the graph-generator tool.";
+  const input = "Question :' "+question+" . '. If the user wants a graph, first fetch the informations to display in the document-answerer tool and guess what info he wants displayed, and then only, call the graph-generator tool if asked by the user.";
 
   console.log(`Executing with input "${input}"...`);
 

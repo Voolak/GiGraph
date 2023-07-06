@@ -44,11 +44,12 @@ export class DocumentAnsweringChain extends BaseChain {
         context += document["pageContent"];
       });
   
-      var QA_PROMPT = `Les informations de contexte sont ci-dessous. 
+      var QA_PROMPT = ` Tu est un outil dans un système qui réponds à des questions sous forme de texte ou de graphs. Ton travail est d'assumer la responsabilité de la génération de texte basé sur le contexte qui t'est donné, tu ne fais pas de graphs.
+      Les informations de contexte sont ci-dessous. 
         ---------------------
         ${context}
         ---------------------
-        Compte tenu des informations contextuelles et non des connaissances préalables, répondez à la question suivante du mieux que vous pouvez : ${sanitizedQuestion} ?:
+        Compte tenu des informations contextuelles et non des connaissances préalables, répondez à la question suivante du mieux que vous pouvez, il faut toujours donner une réponse : ${sanitizedQuestion} ?:
         
         `;
   

@@ -17,7 +17,7 @@ export const runGraphAgent = async (question, userId) => {
       schema: z.object({
         text: z.string().describe("the users question"),
         type: z.string().describe("graph type"),
-        data: z.string().describe("data for the graph"),
+        data: z.string().describe("a string of data for the graph"),
       }),
       func: async ({ text, type, data }) =>{
         try {
@@ -39,7 +39,7 @@ export const runGraphAgent = async (question, userId) => {
       schema: z.object({
         text: z.string().describe("the users question"),
         type: z.string().describe("graph type"),
-        data: z.string().describe("data for the graph"),
+        data: z.string().describe("a string of data for the graph"),
       }),
       func: async ({ text, type, data }) =>{
         try {
@@ -61,7 +61,7 @@ export const runGraphAgent = async (question, userId) => {
       schema: z.object({
         text: z.string().describe("the users question"),
         type: z.string().describe("graph type"),
-        data: z.string().describe("data for the graph"),
+        data: z.string().describe("a string of data for the graph"),
       }),
       func: async ({ text, type, data }) =>{
         try {

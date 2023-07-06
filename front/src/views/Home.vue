@@ -11,7 +11,7 @@
               chargeant vos documents .PDF, .TXT et .docs.
               <br><br>
               <strong>Attention :</strong> Veillez à toujours cliquer sur le bouton 'Traiter les documents' lorsque vous
-              ajoutez un nouveau document.
+              ajoutez/supprimez un nouveau document.
             </v-card-text>
             <v-card-text>
               <br>
@@ -72,4 +72,5 @@ import TopHeader from '@/components/TopHeader.vue'
 
 .year {
   text-align: right;
-}</style>
+}
+</style>
