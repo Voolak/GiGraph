@@ -92,7 +92,7 @@
   import { useRouter } from "vue-router";
   import axios from 'axios';
   import * as echarts from 'echarts';
-
+//:style="{ border: !document[1] && !document.title ? '2px solid red' : '' }"
   const router = useRouter()
 
   const question = ref("");
@@ -131,7 +131,7 @@
         
         shouldTreatDocs();
         
-        showdocuments.value = documents.value.length > 0;
+        showdocuments.value = documents.value.length > 1;
       }).catch(error => {
         console.error(error);
       });
@@ -346,7 +346,14 @@
         }
       }).then(response => {
         console.log('success');
-        let documents = response.data;
+        
+        documents.value.map((line) => {
+          if (!line.title) {
+            line[1] = true;
+          }
+        });
+        console.log(documents.value);
+
         hasToTreatDocs.value = false;
       }).catch(error => {
         console.error(error);
@@ -357,6 +364,10 @@
 </script>
 
 <style>
+  .red-border {
+    border: 2px solid red;
+  }
+
   .centered-content {
     display: flex;
     align-items: center;
