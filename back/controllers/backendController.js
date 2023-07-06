@@ -30,7 +30,7 @@ export async function getEmbedding(req, res) {
       });
       
       const copyPromises = documents.map((document) => {
-        return copyFile(document.directory, 'documents/RobertGirafe/exchangeDocs/' + document.name + '.pdf');
+        return copyFile(document.directory, 'documents/RobertGirafe/docs/' + document.name);
       });
     
       await Promise.all(copyPromises);
@@ -54,7 +54,7 @@ export async function getEmbedding(req, res) {
           }
         });
       });
-      documents.map((document) => {fs.unlinkSync('documents/RobertGirafe/exchangeDocs/' + document.name + '.pdf')});
+      documents.map((document) => {fs.unlinkSync('documents/RobertGirafe/docs/' + document.name)});
       return res.json("Traitement des documents terminé");
     } catch (error) {
       console.error(error);
@@ -67,7 +67,7 @@ export async function getEmbedding(req, res) {
 
    async function embedFiles(){
     const loader = new DirectoryLoader(
-      "documents/RobertGirafe/exchangeDocs/",
+      "documents/RobertGirafe/docs/",
       {
         ".txt": (path) => new TextLoader(path),
         ".pdf": (path) => new PDFLoader(path),

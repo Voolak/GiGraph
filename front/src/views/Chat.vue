@@ -139,6 +139,7 @@
 
   async function postMessage() {
     if (question.value != "") {
+      question.value = "";
       var id = counter.value;
       loading.value = true;
       messages.value.push({ 'message': question.value, 'type': 0 });
