@@ -92,7 +92,7 @@
   import { useRouter } from "vue-router";
   import axios from 'axios';
   import * as echarts from 'echarts';
-//:style="{ border: !document[1] && !document.title ? '2px solid red' : '' }"
+  
   const router = useRouter()
 
   const question = ref("");
@@ -352,7 +352,6 @@
             line[1] = true;
           }
         });
-        console.log(documents.value);
 
         hasToTreatDocs.value = false;
       }).catch(error => {
@@ -364,10 +363,6 @@
 </script>
 
 <style>
-  .red-border {
-    border: 2px solid red;
-  }
-
   .centered-content {
     display: flex;
     align-items: center;
