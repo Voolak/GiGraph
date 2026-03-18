@@ -1,6 +1,8 @@
 # GiGraph
 
-Ce projet est un site web
+Ce projet est un site web qui permet de générer des graphiques dynamiquement à partir de données uploadées, le tout controlé par un système d'agents autonomes.
+
+This project is a web application that enables dynamic chart generation from uploaded datasets, powered by a system of autonomous agents.
 
 | Contributeur      | Alexandre Choplin     | Romain Bedouret       | Cloé Magnien          | Bastien Oswald        | Andgel Barzana        |
 | ----------------- | --------------------- | --------------------- | --------------------- | --------------------- | --------------------- |
